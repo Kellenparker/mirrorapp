@@ -25,5 +25,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timeBtn" />
+    <ListView
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:id="@+id/linksListView"
+        app:layout_constraintTop_toBottomOf="@id/capBtn"
+        app:layout_constraintLeft_toLeftOf="@id/capBtn"
+        android:layout_marginTop="25dp"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
