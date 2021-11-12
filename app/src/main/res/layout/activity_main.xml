@@ -25,6 +25,16 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timeBtn" />
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:id="@+id/loading"
+        app:layout_constraintTop_toBottomOf="@id/capBtn"
+        app:layout_constraintLeft_toLeftOf="@id/capBtn"
+        />
+
+
     <ListView
         android:layout_width="300dp"
         android:layout_height="300dp"
