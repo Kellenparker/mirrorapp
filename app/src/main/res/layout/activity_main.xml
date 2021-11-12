@@ -27,7 +27,7 @@
         app:layout_constraintTop_toBottomOf="@+id/timeBtn" />
     <ListView
         android:layout_width="300dp"
-        android:layout_height="400dp"
+        android:layout_height="300dp"
         android:id="@+id/linksListView"
         app:layout_constraintTop_toBottomOf="@id/capBtn"
         app:layout_constraintLeft_toLeftOf="@id/capBtn"

@@ -9,6 +9,19 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:textSize="17dp"
+        android:textFontWeight="800"
+        android:id="@+id/errorText"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="105dp"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Create User"
         android:textSize="100px"
         android:textColor="@color/white"
@@ -26,31 +39,31 @@
         android:backgroundTint="@android:color/white"
         android:drawableStart="@drawable/pencil"
         android:drawablePadding="5sp"
-        android:textColor="@color/white"
         android:gravity="start"
         android:hint="First name"
         android:inputType="text"
+        android:textColor="@color/white"
         android:textColorHint="#8e9094"
         android:textCursorDrawable="@null"
         android:textSize="18dp" />
 
     <EditText
+        android:id="@+id/lname1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Last name"
-        android:textCursorDrawable="@null"
-        android:drawableStart="@drawable/pencil"
-        android:backgroundTint="@android:color/white"
-        android:textColorHint="#8e9094"
-        android:drawablePadding="5sp"
-        android:inputType="text"
-        android:textColor="@color/white"
-        android:layout_marginRight="40sp"
         android:layout_marginLeft="40sp"
         android:layout_marginTop="170dp"
-        android:id="@+id/lname1"
-        android:textSize="18dp"
-        android:gravity="start" />
+        android:layout_marginRight="40sp"
+        android:backgroundTint="@android:color/white"
+        android:drawableStart="@drawable/pencil"
+        android:drawablePadding="5sp"
+        android:gravity="start"
+        android:hint="Last name"
+        android:inputType="text"
+        android:textColor="@color/white"
+        android:textColorHint="#8e9094"
+        android:textCursorDrawable="@null"
+        android:textSize="18dp" />
 
 
     <TextView
@@ -98,7 +111,7 @@
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Non-binary"
+            android:text="Other"
             android:textColor="@color/white"
             android:id="@+id/nonbinary"
             android:checked="false"

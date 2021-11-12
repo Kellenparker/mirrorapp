@@ -13,16 +13,19 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
     private val SECOND_ACTIVITY_REQUEST_CODE = 0
     val database = Firebase.database
+    var reference = ""
+    var reference2 = ""
+    var reference3 = ""
+    var listItems = mutableListOf<String>()
+    val listItems2 = mutableListOf<String>()
+    val listItems3 = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,29 +50,40 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val capRef = database.getReference("scan/camera")
-        var reference = ""
+        val capRef = database.getReference("scan/camera/capture")
         lateinit var mdatabase: DatabaseReference
         mdatabase = Firebase.database.reference
 
-        mdatabase.child("scan/links/link0/linkUrl").get().addOnSuccessListener {
-            reference = it.value.toString()
-        }.addOnFailureListener{
-            Log.e("firebase", "Error getting data", it)
-        }
 
+//        DO NOT TOUCH!!!!!!!!!!!!!!!! lol
         capBtn.setOnClickListener {
             capRef.setValue(true)
-            val listItems = mutableListOf("")
-            listItems.add(reference)
-            val adapter:ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line,listItems)
-            listLinks.adapter = adapter
+            for (i in 0..45){
+                mdatabase.child("scan/links/link$i/linkUrl").get().addOnSuccessListener{
+                    reference = it.value.toString()
+                    listItems.add(reference)
+                    mdatabase.child("scan/links/link$i/linkTitle").get().addOnSuccessListener{
+                        reference2 = it.value.toString()
+                        listItems2.add(reference2)
+                        mdatabase.child("scan/links/link$i/linkImg").get().addOnSuccessListener{
+                            reference3 = it.value.toString()
+                            listItems3.add(reference3)
+                            mdatabase.child("scan/stage").get().addOnSuccessListener() {
+                                val myListAdapter = MyListAdapter(this, listItems, listItems2, listItems3)
+                                listLinks.adapter = myListAdapter
+                            }
+                        }
+                    }
+                }
+            }
+
             listLinks.setOnItemClickListener { parent, _, position, _ ->
                 val selectedItem = parent.getItemAtPosition(position) as String
                 val openURL = Intent(android.content.Intent.ACTION_VIEW)
                 openURL.data = Uri.parse("https://www.amazon.com" + selectedItem)
                 startActivity(openURL)
             }
+
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

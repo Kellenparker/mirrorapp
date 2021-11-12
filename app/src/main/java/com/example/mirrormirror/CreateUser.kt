@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import org.w3c.dom.Text
 
 class CreateUser : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,6 +16,10 @@ class CreateUser : AppCompatActivity() {
         val male = findViewById<RadioButton>(R.id.male)
         val female = findViewById<RadioButton>(R.id.female)
         val nonbinary = findViewById<RadioButton>(R.id.nonbinary)
+        val fname = findViewById<EditText>(R.id.fname1)
+        val lname = findViewById<EditText>(R.id.lname1)
+        val errorMsg = findViewById<TextView>(R.id.errorText)
+        val radioGroup = findViewById<RadioGroup>(R.id.gender1)
         var age = 0
         var genderVar = 0
 
@@ -27,19 +32,27 @@ class CreateUser : AppCompatActivity() {
             }
         }
         createBtn.setOnClickListener {
-            if (male.isChecked){
-                genderVar = 0
-            }else if (female.isChecked){
-                genderVar = 1
-            }else if (nonbinary.isChecked){
-                genderVar = 2
-            }
+            if (fname.text.isEmpty()){
+                errorMsg.setText("Please enter your first name.")
+            } else if (lname.text.isEmpty()){
+                errorMsg.setText("Please enter your last name.")
+            }else if (radioGroup.checkedRadioButtonId == -1){
+                errorMsg.setText("Please enter your gender.")
+            }else{
+                if (male.isChecked){
+                    genderVar = 0
+                }else if (female.isChecked){
+                    genderVar = 1
+                }else if (nonbinary.isChecked){
+                    genderVar = 2
+                }
 
-            val resultIntent = Intent()
-            resultIntent.putExtra("age", age)
-            resultIntent.putExtra("gender", genderVar)
-            setResult(Activity.RESULT_OK, resultIntent)
-            finish()
+                val resultIntent = Intent()
+                resultIntent.putExtra("age", age)
+                resultIntent.putExtra("gender", genderVar)
+                setResult(Activity.RESULT_OK, resultIntent)
+                finish()
+            }
         }
 
     }
