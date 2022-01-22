@@ -303,12 +303,11 @@ class SettingsFragment : Fragment() {
                 val owner = v.parent as ViewGroup
                 val destination = view as LinearLayout
 
-                var destTag = destination.getTag().toString()
-                var itemTag = v.getTag().toString()
-                editor.putString(itemTag, destTag)
-                editor.commit()
-
                 if (destination.childCount < 2){
+                    var destTag = destination.getTag().toString()
+                    var itemTag = v.getTag().toString()
+                    editor.putString(itemTag, destTag)
+                    editor.commit()
                     owner.removeView(v)
                     destination.addView(v)
                     var dest = destination.getTag()
@@ -330,8 +329,13 @@ class SettingsFragment : Fragment() {
                     }
 
                 } else if (destination.getTag() == "iconTray"){
+                    var destTag = destination.getTag().toString()
+                    var itemTag = v.getTag().toString()
+                    editor.putString(itemTag, destTag)
+                    editor.commit()
                     owner.removeView(v)
                     destination.addView(v)
+                    updateModule(dragData, -1)
                 }
                 v.visibility = View.VISIBLE
                 true
