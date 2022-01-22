@@ -1,9 +1,11 @@
 package com.example.mirrormirror
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import org.w3c.dom.Text
 
@@ -22,6 +24,8 @@ class CreateUser : AppCompatActivity() {
         val radioGroup = findViewById<RadioGroup>(R.id.gender1)
         var age = 0
         var genderVar = 0
+        var firstName = ""
+        var lastName = ""
 
         if (agePick != null) {
             agePick.minValue = 0
@@ -48,6 +52,10 @@ class CreateUser : AppCompatActivity() {
                 }
 
                 val resultIntent = Intent()
+                firstName = fname.text.toString()
+                lastName = lname.text.toString()
+                resultIntent.putExtra("firstName", firstName)
+                resultIntent.putExtra("lastName", lastName)
                 resultIntent.putExtra("age", age)
                 resultIntent.putExtra("gender", genderVar)
                 setResult(Activity.RESULT_OK, resultIntent)

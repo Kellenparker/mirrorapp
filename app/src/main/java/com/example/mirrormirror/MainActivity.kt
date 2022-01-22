@@ -1,10 +1,12 @@
 package com.example.mirrormirror
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -12,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.ListView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
@@ -26,35 +29,34 @@ class MainActivity : AppCompatActivity() {
     val database = Firebase.database
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //For saving user data
+        val sharedPreference =  getSharedPreferences("user_data",Context.MODE_PRIVATE)
+        if (sharedPreference.getInt("dark_mode", 0) == 0){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val intent = Intent(this,CreateUser::class.java)
-        startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
 
-        val timeBtn = findViewById<Button>(R.id.timeBtn)
+        if (sharedPreference.getString("first_name","") == ""){
+            val intent = Intent(this,CreateUser::class.java)
+            startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
+        }
+
         val capBtn = findViewById<Button>(R.id.capBtn)
         val listLinks = findViewById<ListView>(R.id.linksListView)
         val loadingIcon = findViewById<ImageView>(R.id.loading)
         val continueButton = findViewById<Button>(R.id.continueBtn)
-        val timeRef = database.getReference("modules/time/disabled")
         val stageRef2 = database.getReference("scan/stage")
-        var tBool = true
-        timeRef.setValue(true);
-
-        timeBtn.setOnClickListener {
-            if(tBool) {
-                timeRef.setValue(!tBool)
-                tBool = false
-            }else{
-                timeRef.setValue(!tBool)
-                tBool = true
-            }
-        }
 
         val capRef = database.getReference("scan/camera/capture")
         var dataReference = database.getReference()
         lateinit var mdatabase: DatabaseReference
         mdatabase = Firebase.database.reference
+
+
 
 
 
@@ -130,13 +132,31 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    fun triggerRestart(context: Activity) {
+        val intent = Intent(context, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+        if (context is Activity) {
+            (context as Activity).finish()
+        }
+        Runtime.getRuntime().exit(0)
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == SECOND_ACTIVITY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
+                val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
+                var editor = sharedPreference.edit()
                 val returnString = data!!.getIntExtra("age", 0)
                 val returnString2 = data!!.getIntExtra("gender", 0)
+                val returnString3 = data!!.getStringExtra("firstName")
+                val returnString4 = data!!.getStringExtra("lastName")
+                editor.putString("first_name", returnString3.toString())
+                editor.putString("last_name", returnString4.toString())
+                editor.putInt("age", returnString)
+                editor.putInt("gender", returnString2)
+                editor.commit()
                 val ageRef = database.getReference("user/age/")
                 val genderRef = database.getReference("user/gender/")
                 ageRef.setValue(returnString)

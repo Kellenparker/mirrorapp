@@ -9,136 +9,303 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/calLabel"
-        android:text="Calendar"
+        android:id="@+id/helloLabel"
+        android:text="Hello"
+        android:textColor="#002F6E"
+        android:textSize="20dp"
+        android:textStyle = "bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="25dp"
+        />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#002F6E"
+        android:id="@+id/horizontalLine"
+        android:layout_centerVertical = "true"
+        android:layout_alignParentTop = "true"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        app:layout_constraintTop_toBottomOf="@id/helloLabel"
+        app:layout_constraintRight_toLeftOf="@id/helloLabel"
+        />
+    <TextView
+        android:id="@+id/instructionsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Drag and drop icons below to customize your mirror:"
+        android:layout_marginLeft="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalLine"
+        app:layout_constraintLeft_toRightOf="@id/horizontalLine"
         />
 
-    <Spinner
-        android:id="@+id/spinCalendar"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/calLabel"
-        app:layout_constraintTop_toTopOf="@+id/calLabel"
-        android:layout_marginLeft="150dp"
-        android:entries="@array/positions"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="118dp" />
-    <TextView
+    <LinearLayout
+        android:id="@+id/masterLayout"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:background="#002F6E"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/instructionsLabel"
+        tools:context=".MainActivity">
+
+        <LinearLayout
+            android:id="@+id/iconLayout"
+            android:tag="iconTray"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@color/white">
+
+
+            <ImageView
+                android:id="@+id/dragCalendar"
+                android:tag="calendar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/white"
+                android:src="@drawable/calendar" />
+            <ImageView
+                android:id="@+id/dragMotivation"
+                android:tag="motivation"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/white"
+                android:src="@drawable/motivation" />
+            <ImageView
+                android:id="@+id/dragNews"
+                android:tag="news"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/white"
+                android:src="@drawable/news" />
+            <ImageView
+                android:id="@+id/dragNotes"
+                android:tag="notes"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/white"
+                android:src="@drawable/notes" />
+            <ImageView
+                android:id="@+id/dragTraffic"
+                android:tag="traffic"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/white"
+                android:src="@drawable/traffic" />
+            <ImageView
+                android:id="@+id/dragWeather"
+                android:tag="weather"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/white"
+                android:src="@drawable/weather" />
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="2"
+        android:background="#002F6E">
+
+        <LinearLayout
+            android:id="@+id/topLeftLayout"
+            android:tag="topLeft"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:background="#144D9A">
+
+            <TextView
+                android:id="@+id/topLeftLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Top-Left"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/topRightLayout"
+            android:tag="topRight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:background="#144D9A">
+
+            <TextView
+                android:id="@+id/topRightLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Top-Right"
+                android:textColor="@color/white"
+                />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/middleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="2"
+            android:background="#002F6E">
+
+            <LinearLayout
+                android:id="@+id/middleLeftLayout"
+                android:tag="middleLeft"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:background="#144D9A">
+
+                <TextView
+                    android:id="@+id/middleLeftLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Middle-Left"
+                    android:textColor="@color/white"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/middleRightLayout"
+                android:tag="middleRight"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:background="#144D9A">
+
+                <TextView
+                    android:id="@+id/middleRightLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Middle-Right"
+                    android:textColor="@color/white"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottomLayout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="2"
+            android:background="#002F6E">
+
+            <LinearLayout
+                android:id="@+id/bottomLeftLayout"
+                android:tag="bottomLeft"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:background="#144D9A">
+
+                <TextView
+                    android:id="@+id/bottomLeftLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bottom-Left"
+                    android:textColor="@color/white"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/bottomRightLayout"
+                android:tag="bottomRight"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:background="#144D9A">
+
+                <TextView
+                    android:id="@+id/bottomRightLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bottom-Right"
+                    android:textColor="@color/white"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/toggleTimeLabel"
+            android:text="Show Time"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="25dp"
+            app:layout_constraintTop_toBottomOf="@id/masterLayout"
+            app:layout_constraintLeft_toLeftOf="@+id/masterLayout"
+            />
+
+    <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/notesLabel"
-        android:text="Sticky Notes"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/calLabel"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="25dp"
+        android:id="@+id/toggleTimeSwitch"
+        android:layout_marginRight="25dp"
+        app:layout_constraintTop_toTopOf="@id/toggleTimeLabel"
+        app:layout_constraintRight_toRightOf="@id/masterLayout"
         />
-    <Spinner
-        android:id="@+id/spinNotes"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/notesLabel"
-        app:layout_constraintLeft_toLeftOf="@id/spinCalendar"
-        android:entries="@array/positions"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="118dp" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/trafficLabel"
-        android:text="Traffic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/notesLabel"
+        android:id="@+id/darkModeLabel"
+        android:text="Dark Mode"
         android:layout_marginTop="25dp"
-        android:layout_marginLeft="25dp"
-        />
-    <Spinner
-        android:id="@+id/spinTraffic"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/trafficLabel"
-        app:layout_constraintLeft_toLeftOf="@id/spinNotes"
-        android:entries="@array/positions"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="118dp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/newsLabel"
-        android:text="News"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/trafficLabel"
-        android:entries="@array/positions"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="25dp"
-        />
-    <Spinner
-        android:id="@+id/spinNews"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/newsLabel"
-        app:layout_constraintLeft_toLeftOf="@id/spinTraffic"
-        android:entries="@array/positions"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="118dp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/notifLabel"
-        android:text="Notifications"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/newsLabel"
-        android:entries="@array/positions"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="25dp"
-        />
-    <Spinner
-        android:id="@+id/spinNotifications"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/notifLabel"
-        app:layout_constraintLeft_toLeftOf="@id/spinNotes"
-        android:entries="@array/positions"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="118dp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/weatherLabel"
-        android:text="Weather"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/notifLabel"
-        android:entries="@array/positions"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="25dp"
-        />
-    <Spinner
-        android:id="@+id/spinWeather"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/weatherLabel"
-        app:layout_constraintLeft_toLeftOf="@id/spinNotifications"
-        android:entries="@array/positions"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="118dp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/darkLabel"
-        android:text="Enable Dark Mode"
-        android:layout_marginTop="25dp"
-        app:layout_constraintTop_toBottomOf="@id/weatherLabel"
-        app:layout_constraintLeft_toLeftOf="@+id/weatherLabel"
+        app:layout_constraintTop_toBottomOf="@id/toggleTimeLabel"
+        app:layout_constraintLeft_toLeftOf="@+id/toggleTimeLabel"
         />
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/darkMode"
-        app:layout_constraintTop_toTopOf="@id/darkLabel"
-        app:layout_constraintRight_toRightOf="@id/spinWeather"
+        android:id="@+id/darkModeSwitch"
+        app:layout_constraintTop_toTopOf="@id/darkModeLabel"
+        app:layout_constraintRight_toRightOf="@id/toggleTimeSwitch"
         />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/logOut"
+        android:text="Logout"
+        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toBottomOf="@id/darkModeLabel"
+        app:layout_constraintLeft_toLeftOf="@id/darkModeLabel"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
