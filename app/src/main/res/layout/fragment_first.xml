@@ -20,7 +20,7 @@
         android:layout_marginLeft="25dp"
         />
     <View
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#002F6E"
         android:id="@+id/horizontalLine"
@@ -48,7 +48,6 @@
         android:layout_height="230dp"
         android:background="#002F6E"
         android:orientation="vertical"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         app:layout_constraintTop_toBottomOf="@+id/instructionsLabel"
@@ -265,22 +264,43 @@
         </LinearLayout>
     </LinearLayout>
 
+        <EditText
+            android:id="@+id/notesText"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="25dp"
+            android:inputType="textMultiLine"
+            android:minLines="1"
+            android:maxLines="3"
+            android:scrollbars="vertical"
+            android:gravity="top|start"
+            android:cursorVisible="false"
+            android:textColor="@color/black"
+            android:hint="Edit content for notes module"
+            android:fontFamily="sans-serif-condensed"
+            android:background="#7afcff"
+            android:focusedByDefault="false"
+            app:layout_constraintTop_toBottomOf="@+id/masterLayout"
+            app:layout_constraintLeft_toLeftOf="@+id/masterLayout"
+
+            />
+    
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/toggleTimeLabel"
             android:text="Show Time"
             android:layout_marginTop="25dp"
-            android:layout_marginLeft="25dp"
-            app:layout_constraintTop_toBottomOf="@id/masterLayout"
-            app:layout_constraintLeft_toLeftOf="@+id/masterLayout"
+            app:layout_constraintTop_toBottomOf="@id/notesText"
+            app:layout_constraintLeft_toLeftOf="@+id/notesText"
             />
 
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/toggleTimeSwitch"
-        android:layout_marginRight="25dp"
         app:layout_constraintTop_toTopOf="@id/toggleTimeLabel"
         app:layout_constraintRight_toRightOf="@id/masterLayout"
         />
@@ -289,7 +309,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/darkModeLabel"
         android:text="Dark Mode"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/toggleTimeLabel"
         app:layout_constraintLeft_toLeftOf="@+id/toggleTimeLabel"
         />
@@ -300,14 +320,25 @@
         app:layout_constraintTop_toTopOf="@id/darkModeLabel"
         app:layout_constraintRight_toRightOf="@id/toggleTimeSwitch"
         />
-    <Button
-        android:layout_width="wrap_content"
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/logOut"
-        android:text="Logout"
-        android:layout_marginTop="25dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="50dp"
         app:layout_constraintTop_toBottomOf="@id/darkModeLabel"
         app:layout_constraintLeft_toLeftOf="@id/darkModeLabel"
-        />
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logOut"
+            android:text="Logout"
+            />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

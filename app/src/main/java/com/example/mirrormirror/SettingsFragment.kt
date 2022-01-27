@@ -1,5 +1,6 @@
 package com.example.mirrormirror
 
+import android.R.attr
 import android.app.Activity
 import android.app.UiModeManager.MODE_NIGHT_YES
 import android.content.ClipData
@@ -8,12 +9,15 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.AttributeSet
 import android.util.Log
-import android.view.DragEvent
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.navigation.fragment.findNavController
 import com.example.mirrormirror.databinding.FragmentFirstBinding
@@ -28,8 +32,13 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatEditText
 import kotlinx.coroutines.flow.callbackFlow
 import kotlin.math.log
+import android.R.attr.delay
+
+
+
 
 
 /**
@@ -403,6 +412,22 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val sharedPreference = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
         var editor = sharedPreference.edit()
+
+//      Notes
+        binding.notesText.setText(sharedPreference.getString("notesText", ""))
+        val notesRef = database.getReference("modules/notes/text")
+        binding.notesText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+                notesRef.setValue(binding.notesText.text.toString())
+                editor.putString("notesText", binding.notesText.text.toString())
+                editor.commit()
+            }
+        })
+
         binding.helloLabel.setText("Hello, " + sharedPreference.getString("first_name", ""))
         if (sharedPreference.getInt("dark_mode", 0) == 0) {
             binding.darkModeSwitch.isChecked = false
@@ -462,6 +487,7 @@ class SettingsFragment : Fragment() {
         }
         Runtime.getRuntime().exit(0)
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
