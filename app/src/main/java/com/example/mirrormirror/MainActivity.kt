@@ -148,19 +148,9 @@ class MainActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
                 var editor = sharedPreference.edit()
-                val returnString = data!!.getIntExtra("age", 0)
-                val returnString2 = data!!.getIntExtra("gender", 0)
                 val returnString3 = data!!.getStringExtra("firstName")
-                val returnString4 = data!!.getStringExtra("lastName")
                 editor.putString("first_name", returnString3.toString())
-                editor.putString("last_name", returnString4.toString())
-                editor.putInt("age", returnString)
-                editor.putInt("gender", returnString2)
                 editor.commit()
-                val ageRef = database.getReference("user/age/")
-                val genderRef = database.getReference("user/gender/")
-                ageRef.setValue(returnString)
-                genderRef.setValue(returnString2)
             }
         }
     }
