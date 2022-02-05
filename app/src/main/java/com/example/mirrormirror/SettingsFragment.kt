@@ -6,10 +6,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.text.Spanned
 import android.text.TextWatcher
 import android.util.Log
-import android.view.*
-import android.widget.*
+import android.view.DragEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.example.mirrormirror.databinding.FragmentFirstBinding
@@ -26,14 +31,17 @@ class SettingsFragment : Fragment() {
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
     val database = Firebase.database
-    var dataReference = database.getReference()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         super.onCreate(null)
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        requireActivity().onBackPressedDispatcher.addCallback() {
+            // With blank your fragment BackPressed will be disabled.
+        }
         return binding.root
     }
 
@@ -176,10 +184,75 @@ class SettingsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-        val sharedPreference =
-            requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
-        var editor = sharedPreference.edit()
+        // Button control**************************************
+        binding.customizeBtn.setOnClickListener{
+            binding.instructionsLabel.visibility = View.VISIBLE
+            binding.masterLayout.visibility = View.VISIBLE
+            binding.notesText.visibility = View.GONE
+            binding.toggleTimeLabel.visibility = View.VISIBLE
+            binding.toggleTimeSwitch.visibility = View.VISIBLE
+            binding.darkModeLabel.visibility = View.GONE
+            binding.darkModeSwitch.visibility = View.GONE
+            binding.customizeBtn.visibility = View.GONE
+            binding.notesBtn.visibility = View.GONE
+            binding.preferencesBtn.visibility = View.GONE
+            binding.logoutLayout.visibility = View.GONE
+            binding.backToSettingsLayout.visibility = View.VISIBLE
+            binding.backToScanLayout.visibility = View.GONE
+        }
+        binding.notesBtn.setOnClickListener{
+            binding.instructionsLabel.visibility = View.GONE
+            binding.masterLayout.visibility = View.GONE
+            binding.notesText.visibility = View.VISIBLE
+            binding.toggleTimeLabel.visibility = View.GONE
+            binding.toggleTimeSwitch.visibility = View.GONE
+            binding.darkModeLabel.visibility = View.GONE
+            binding.darkModeSwitch.visibility = View.GONE
+            binding.customizeBtn.visibility = View.GONE
+            binding.notesBtn.visibility = View.GONE
+            binding.preferencesBtn.visibility = View.GONE
+            binding.logoutLayout.visibility = View.GONE
+            binding.backToSettingsLayout.visibility = View.VISIBLE
+            binding.backToScanLayout.visibility = View.GONE
+        }
+        binding.preferencesBtn.setOnClickListener{
+            binding.instructionsLabel.visibility = View.GONE
+            binding.masterLayout.visibility = View.GONE
+            binding.notesText.visibility = View.GONE
+            binding.toggleTimeLabel.visibility = View.GONE
+            binding.toggleTimeSwitch.visibility = View.GONE
+            binding.darkModeLabel.visibility = View.VISIBLE
+            binding.darkModeSwitch.visibility = View.VISIBLE
+            binding.customizeBtn.visibility = View.GONE
+            binding.notesBtn.visibility = View.GONE
+            binding.preferencesBtn.visibility = View.GONE
+            binding.logoutLayout.visibility = View.GONE
+            binding.backToSettingsLayout.visibility = View.VISIBLE
+            binding.backToScanLayout.visibility = View.GONE
+        }
+        binding.backToSettings.setOnClickListener{
+            binding.instructionsLabel.visibility = View.GONE
+            binding.masterLayout.visibility = View.GONE
+            binding.notesText.visibility = View.GONE
+            binding.toggleTimeLabel.visibility = View.GONE
+            binding.toggleTimeSwitch.visibility = View.GONE
+            binding.darkModeLabel.visibility = View.GONE
+            binding.darkModeSwitch.visibility = View.GONE
+            binding.customizeBtn.visibility = View.VISIBLE
+            binding.notesBtn.visibility = View.VISIBLE
+            binding.preferencesBtn.visibility = View.VISIBLE
+            binding.logoutLayout.visibility = View.GONE
+            binding.backToSettingsLayout.visibility = View.GONE
+            binding.backToScanLayout.visibility = View.VISIBLE
+        }
+        binding.backToScan.setOnClickListener{
+            requireActivity().finish()
+        }
+
+
+
+        //*****************************************************
+        val sharedPreference = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
         var iconView = binding.iconLayout as ViewGroup
         var topLeftView = binding.topLeftLayout as ViewGroup
         var topRightView = binding.topRightLayout as ViewGroup
@@ -203,12 +276,11 @@ class SettingsFragment : Fragment() {
         bottomRightView.addView(binding.bottomRightLabel)
 
 
-        // get location in database, set to shared prefrences
+        // get location in database, set to shared preferences
         val db = Firebase.firestore
         val docRef =
             db.collection("users").document(sharedPreference.getString("userId", "").toString())
         docRef.get().addOnSuccessListener { document ->
-//            Log.d("Data", "DocumentSnapshot data: ${document.data}")
             var calendar = document.data?.get("calendar").toString()
             var motivation = document.data?.get("motivation").toString()
             var news = document.data?.get("news").toString()
@@ -419,7 +491,7 @@ class SettingsFragment : Fragment() {
                 updateModule("weather", 7)
             }
 
-
+            // Conditions for dragging items
             binding.iconLayout.setOnDragListener(dragListener)
             binding.topLeftLayout.setOnDragListener(dragListener)
             binding.topRightLayout.setOnDragListener(dragListener)
@@ -488,16 +560,39 @@ class SettingsFragment : Fragment() {
             //      Notes
             val notesRef = database.getReference("modules/notes/text")
             binding.notesText.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable) {}
-                override fun beforeTextChanged(
-                    s: CharSequence, start: Int,
-                    count: Int, after: Int
-                ) {
+                var textBeforeEdit = ""
+                override fun afterTextChanged(s: Editable) {
+                    val str = s.toString()
+                    val spanStart = s.getSpanStart(1)
+                    val spanEnd = s.getSpanEnd(1)
+                    var lastNL = str.lastIndexOf('\n', spanStart)
+                    var nextNL: Int
+                    while (lastNL < spanEnd) {
+                        nextNL = str.indexOf('\n', lastNL + 1)
+                        if (nextNL == -1) nextNL = str.length
+                        if (nextNL - lastNL > 20 + 1) {
+                            s.replace(spanStart, spanEnd, textBeforeEdit)
+                            break
+                        }
+                        lastNL = nextNL
+                    }
+                    s.removeSpan(1)
+
                 }
-                override fun onTextChanged(
-                    s: CharSequence, start: Int,
-                    before: Int, count: Int
-                ) {
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                    textBeforeEdit = s.toString().substring(start, start + count)
+                }
+
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    binding.notesText.getText().setSpan(1, start, start + count, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                    var newLineChar = "\n"
+                    val editTextRowCount: Int = binding.notesText.getText().count { newLineChar.contains(it) }
+                    if (editTextRowCount > 9){
+                        val lastBreakIndex = binding.notesText.getText().lastIndexOf("\n")
+                        val newText = binding.notesText.getText().toString().substring(0, lastBreakIndex)
+                        binding.notesText.setText("")
+                        binding.notesText.append(newText)
+                    }
                     notesRef.setValue(binding.notesText.text.toString())
                     docRef.update("text", binding.notesText.text.toString())
                 }
@@ -543,11 +638,12 @@ class SettingsFragment : Fragment() {
                     docRef.update("time", "false")
                 }
             }
+            // Log out
             binding.logOut.setOnClickListener() {
                 editor.putString("first_name", "")
                 editor.commit()
                 requireActivity().finish()
-                val intent = Intent (requireContext(), MainActivity::class.java)
+                val intent = Intent(requireContext(), MainActivity::class.java)
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 startActivity(intent)
                 Runtime.getRuntime().exit(0)
@@ -556,6 +652,7 @@ class SettingsFragment : Fragment() {
             Log.d("Error", "get failed with ", exception)
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,19 +1,17 @@
 package com.example.mirrormirror
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import org.w3c.dom.Text
 
 class CreateUser : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,8 +49,6 @@ class CreateUser : AppCompatActivity() {
         var auth: FirebaseAuth
         auth = Firebase.auth
         val db = Firebase.firestore
-        val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
-//        var dataReference = database.getReference()
 
         createAccountBtn.setOnClickListener {
             errorMsg.setText("")
@@ -139,14 +135,10 @@ class CreateUser : AppCompatActivity() {
                             val user = auth.currentUser
                             val uid = user?.uid.toString()
                             val docRef = db.collection("users").document(uid)
+                            //Get existing name and user id
                             docRef.get().addOnSuccessListener { document ->
                                 if (document != null) {
-//                                    Log.d("Data", "DocumentSnapshot data: ${document.data}")
-                                    age = document.data?.get("age").toString().toInt()
-                                    genderVar = document.data?.get("gender").toString().toInt()
                                     firstName = document.data?.get("fname").toString()
-                                    lastName = document.data?.get("lname").toString()
-                                    emailAddress = document.data?.get("emailAddress").toString()
                                     resultIntent.putExtra("firstName", firstName)
                                     resultIntent.putExtra("userId", uid)
                                     setResult(Activity.RESULT_OK, resultIntent)
@@ -204,6 +196,7 @@ class CreateUser : AppCompatActivity() {
                             Log.d("Success", "createUserWithEmail:success")
                             val user = auth.currentUser
                             val uid = user?.uid.toString()
+                            // Create user in data base with the following values
                             val userData = hashMapOf(
                                 "fname" to firstName,
                                 "lname" to lastName,
@@ -229,11 +222,7 @@ class CreateUser : AppCompatActivity() {
                                     ageRef.setValue(age)
                                     genderRef.setValue(genderVar)
                                 }.addOnFailureListener { e ->
-                                    Log.w(
-                                        "Error",
-                                        "Error writing document",
-                                        e
-                                    )
+                                    Log.w("Error", "Error writing document", e)
                                 }
                             resultIntent.putExtra("userId", uid)
                             setResult(Activity.RESULT_OK, resultIntent)

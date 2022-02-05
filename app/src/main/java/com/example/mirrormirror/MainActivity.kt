@@ -1,27 +1,18 @@
 package com.example.mirrormirror
 
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
-import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.widget.Button
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -29,8 +20,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
-import java.util.*
+import com.google.firebase.ktx.Firebase
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,29 +31,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //For saving user data
-        val sharedPreference =  getSharedPreferences("user_data",Context.MODE_PRIVATE)
-        val db = Firebase.firestore
-        val docRef = db.collection("users").document(sharedPreference.getString("userId", "").toString())
-        docRef.get().addOnSuccessListener { document ->
-            var darkMode = document.data?.get("darkMode").toString()
-            if (darkMode == "false"){
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }else{
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
-        }.addOnFailureListener { exception ->
-            Log.d("Error", "get failed with ", exception)
-        }
+        val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
 
-
+        //If user is not already signed in, make them sign in or create an account
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        if (sharedPreference.getString("first_name","") == ""){
-            val intent = Intent(this,CreateUser::class.java)
+        if (sharedPreference.getString("first_name", "") == "") {
+            val intent = Intent(this, CreateUser::class.java)
             startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
         }
 
+
+        //Scanning feature with links
         val capBtn = findViewById<Button>(R.id.capBtn)
         val listLinks = findViewById<ListView>(R.id.linksListView)
         val loadingIcon = findViewById<ImageView>(R.id.loading)
@@ -113,19 +94,21 @@ class MainActivity : AppCompatActivity() {
                                                     listItems2.add(reference2)
                                                     mdatabase.child("scan/links/link$i/linkImg")
                                                         .get().addOnSuccessListener {
-                                                        reference3 = it.value.toString()
-                                                        listItems3.add(reference3)
-                                                        mdatabase.child("scan/stage").get()
-                                                            .addOnSuccessListener() {
-                                                                val myListAdapter = MyListAdapter(
-                                                                    this@MainActivity,
-                                                                    listItems,
-                                                                    listItems2,
-                                                                    listItems3
-                                                                )
-                                                                listLinks.adapter = myListAdapter
-                                                            }
-                                                    }
+                                                            reference3 = it.value.toString()
+                                                            listItems3.add(reference3)
+                                                            mdatabase.child("scan/stage").get()
+                                                                .addOnSuccessListener() {
+                                                                    val myListAdapter =
+                                                                        MyListAdapter(
+                                                                            this@MainActivity,
+                                                                            listItems,
+                                                                            listItems2,
+                                                                            listItems3
+                                                                        )
+                                                                    listLinks.adapter =
+                                                                        myListAdapter
+                                                                }
+                                                        }
                                                 }
                                         }
                                 }
@@ -138,6 +121,7 @@ class MainActivity : AppCompatActivity() {
                                 }
                             }
                         }
+
                         override fun onCancelled(error: DatabaseError) {
                             //This doesn't do anything but will cause errors if you delete it
                         }
@@ -149,6 +133,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == SECOND_ACTIVITY_REQUEST_CODE) {
+            //Make sure everything went ok from the create user page and save their name and uid
             if (resultCode == Activity.RESULT_OK) {
                 val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
                 var editor = sharedPreference.edit()
@@ -158,8 +143,10 @@ class MainActivity : AppCompatActivity() {
                 editor.putString("userId", returnUserId.toString())
                 editor.commit()
 
+                //Load user profile onto the mirror.
                 val db = Firebase.firestore
-                val docRef = db.collection("users").document(sharedPreference.getString("userId", "").toString())
+                val docRef = db.collection("users")
+                    .document(sharedPreference.getString("userId", "").toString())
                 docRef.get().addOnSuccessListener { document ->
                     var calendar = document.data?.get("calendar").toString()
                     var motivation = document.data?.get("motivation").toString()
@@ -188,15 +175,21 @@ class MainActivity : AppCompatActivity() {
                     while (!editor.commit()) {
                         Thread.sleep(1000)
                     }
+                    // Set Dark mode based on user preferences
+                    if (darkMode == "false") {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    }
 
                     //Update notes text, time, age, gender
                     val textRef = database.getReference("modules/notes/text")
                     textRef.setValue(sharedPreference.getString("notesText", ""))
 
                     val timeRef = database.getReference("modules/time/disabled")
-                    if (sharedPreference.getString("time", "") == "false"){
+                    if (sharedPreference.getString("time", "") == "false") {
                         timeRef.setValue(true)
-                    }else{
+                    } else {
                         timeRef.setValue(false)
                     }
 
@@ -321,7 +314,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    //Function that allows for updates between realtime database and Firestore
     fun updateModule(module: String, location: Int) {
         val calLocRef = database.getReference("modules/calendar/location")
         val calRef = database.getReference("modules/calendar/disabled")
@@ -373,20 +366,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Create menu with settings
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.mirror_menu, menu)
         return true
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                val intent = Intent(this,SettingsActivity::class.java)
+                val intent = Intent(this, SettingsActivity::class.java)
                 intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+    override fun onBackPressed() {
+//        Do nothing
     }
 }

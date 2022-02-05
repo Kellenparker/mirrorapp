@@ -7,163 +7,168 @@
     tools:context=".SettingsFragment">
 
     <TextView
+        android:id="@+id/helloLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/helloLabel"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="5dp"
         android:text="Hello"
         android:textColor="#002F6E"
         android:textSize="20dp"
-        android:textStyle = "bold"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="25dp"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
+        android:id="@+id/horizontalLine"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#002F6E"
-        android:id="@+id/horizontalLine"
-        android:layout_centerVertical = "true"
-        android:layout_alignParentTop = "true"
-        android:layout_marginTop="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="25dp"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="25dp"
-        app:layout_constraintTop_toBottomOf="@id/helloLabel"
+        android:background="#002F6E"
         app:layout_constraintRight_toLeftOf="@id/helloLabel"
-        />
+        app:layout_constraintTop_toBottomOf="@id/helloLabel" />
+
     <TextView
         android:id="@+id/instructionsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Drag and drop icons below to customize your mirror:"
         android:layout_marginLeft="25dp"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalLine"
+        android:visibility="gone"
+        android:text="Drag and drop icons below to customize your mirror:"
         app:layout_constraintLeft_toRightOf="@id/horizontalLine"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/horizontalLine" />
 
     <LinearLayout
         android:id="@+id/masterLayout"
         android:layout_width="match_parent"
         android:layout_height="230dp"
-        android:background="#002F6E"
-        android:orientation="vertical"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
+        android:background="#002F6E"
+        android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/instructionsLabel"
         tools:context=".MainActivity">
 
         <LinearLayout
             android:id="@+id/iconLayout"
-            android:tag="iconTray"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:orientation="horizontal"
+            android:background="@color/white"
             android:gravity="center"
-            android:background="@color/white">
+            android:orientation="horizontal"
+            android:tag="iconTray">
 
 
             <ImageView
                 android:id="@+id/dragCalendar"
-                android:tag="calendar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@color/white"
-                android:src="@drawable/calendar" />
+                android:src="@drawable/calendar"
+                android:tag="calendar" />
+
             <ImageView
                 android:id="@+id/dragMotivation"
-                android:tag="motivation"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@color/white"
-                android:src="@drawable/motivation" />
+                android:src="@drawable/motivation"
+                android:tag="motivation" />
+
             <ImageView
                 android:id="@+id/dragNews"
-                android:tag="news"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@color/white"
-                android:src="@drawable/news" />
+                android:src="@drawable/news"
+                android:tag="news" />
+
             <ImageView
                 android:id="@+id/dragNotes"
-                android:tag="notes"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@color/white"
-                android:src="@drawable/notes" />
+                android:src="@drawable/notes"
+                android:tag="notes" />
+
             <ImageView
                 android:id="@+id/dragTraffic"
-                android:tag="traffic"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@color/white"
-                android:src="@drawable/traffic" />
+                android:src="@drawable/traffic"
+                android:tag="traffic" />
+
             <ImageView
                 android:id="@+id/dragWeather"
-                android:tag="weather"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@color/white"
-                android:src="@drawable/weather" />
+                android:src="@drawable/weather"
+                android:tag="weather" />
         </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/topLayout"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:weightSum="2"
-        android:background="#002F6E">
-
         <LinearLayout
-            android:id="@+id/topLeftLayout"
-            android:tag="topLeft"
+            android:id="@+id/topLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="60dp"
+            android:background="#002F6E"
             android:gravity="center"
-            android:layout_weight="1"
             android:orientation="horizontal"
-            android:background="#144D9A">
+            android:weightSum="2">
 
-            <TextView
-                android:id="@+id/topLeftLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Top-Left"
-                android:textColor="@color/white"
-                />
+            <LinearLayout
+                android:id="@+id/topLeftLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#144D9A"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:tag="topLeft">
 
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/topRightLayout"
-            android:tag="topRight"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:background="#144D9A">
+                <TextView
+                    android:id="@+id/topLeftLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Top-Left"
+                    android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/topRightLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Top-Right"
-                android:textColor="@color/white"
-                />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/topRightLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#144D9A"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:tag="topRight">
+
+                <TextView
+                    android:id="@+id/topRightLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Top-Right"
+                    android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
 
@@ -171,47 +176,46 @@
             android:id="@+id/middleLayout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal"
+            android:background="#002F6E"
             android:gravity="center"
-            android:weightSum="2"
-            android:background="#002F6E">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <LinearLayout
                 android:id="@+id/middleLeftLayout"
-                android:tag="middleLeft"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="1"
+                android:background="#144D9A"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:background="#144D9A">
+                android:tag="middleLeft">
 
                 <TextView
                     android:id="@+id/middleLeftLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Middle-Left"
-                    android:textColor="@color/white"
-                    />
+                    android:textColor="@color/white" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/middleRightLayout"
-                android:tag="middleRight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="1"
+                android:background="#144D9A"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:background="#144D9A">
+                android:tag="middleRight">
 
                 <TextView
                     android:id="@+id/middleRightLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Middle-Right"
-                    android:textColor="@color/white"
-                    />
+                    android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
 
@@ -219,126 +223,202 @@
             android:id="@+id/bottomLayout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal"
+            android:background="#002F6E"
             android:gravity="center"
-            android:weightSum="2"
-            android:background="#002F6E">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <LinearLayout
                 android:id="@+id/bottomLeftLayout"
-                android:tag="bottomLeft"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="1"
+                android:background="#144D9A"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:background="#144D9A">
+                android:tag="bottomLeft">
 
                 <TextView
                     android:id="@+id/bottomLeftLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bottom-Left"
-                    android:textColor="@color/white"
-                    />
+                    android:textColor="@color/white" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/bottomRightLayout"
-                android:tag="bottomRight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="1"
+                android:background="#144D9A"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:background="#144D9A">
+                android:tag="bottomRight">
 
                 <TextView
                     android:id="@+id/bottomRightLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bottom-Right"
-                    android:textColor="@color/white"
-                    />
+                    android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
-        <EditText
-            android:id="@+id/notesText"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="25dp"
-            android:inputType="textMultiLine"
-            android:minLines="1"
-            android:maxLines="3"
-            android:scrollbars="vertical"
-            android:gravity="top|start"
-            android:cursorVisible="false"
-            android:textColor="@color/black"
-            android:hint="Edit content for notes module"
-            android:fontFamily="sans-serif-condensed"
-            android:background="#7afcff"
-            android:focusedByDefault="false"
-            app:layout_constraintTop_toBottomOf="@+id/masterLayout"
-            app:layout_constraintLeft_toLeftOf="@+id/masterLayout"
+    <EditText
+        android:id="@+id/notesText"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="25dp"
+        android:background="#7afcff"
+        android:cursorVisible="true"
+        android:focusedByDefault="false"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="top|center_horizontal"
+        android:hint="Edit content for notes module"
+        android:inputType="textMultiLine"
+        android:lines="10"
+        android:maxLength="200"
+        android:maxWidth="10dp"
+        android:visibility="gone"
+        android:scrollbars="vertical"
+        android:textColor="@color/black"
+        app:layout_constraintLeft_toLeftOf="@+id/masterLayout"
+        app:layout_constraintTop_toBottomOf="@+id/masterLayout"
 
-            />
-    
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/toggleTimeLabel"
-            android:text="Show Time"
-            android:layout_marginTop="25dp"
-            app:layout_constraintTop_toBottomOf="@id/notesText"
-            app:layout_constraintLeft_toLeftOf="@+id/notesText"
-            />
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/toggleTimeSwitch"
-        app:layout_constraintTop_toTopOf="@id/toggleTimeLabel"
-        app:layout_constraintRight_toRightOf="@id/masterLayout"
         />
+
     <TextView
+        android:id="@+id/toggleTimeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/darkModeLabel"
-        android:text="Dark Mode"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/toggleTimeLabel"
-        app:layout_constraintLeft_toLeftOf="@+id/toggleTimeLabel"
-        />
+        android:layout_marginTop="20dp"
+        android:text="Show Time"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@+id/notesText"
+        app:layout_constraintTop_toBottomOf="@id/notesText" />
+
     <Switch
+        android:id="@+id/toggleTimeSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="@id/masterLayout"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/toggleTimeLabel" />
+
+    <TextView
+        android:id="@+id/darkModeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Dark Mode"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@+id/toggleTimeLabel"
+        app:layout_constraintTop_toBottomOf="@id/toggleTimeLabel" />
+
+    <Switch
         android:id="@+id/darkModeSwitch"
-        app:layout_constraintTop_toTopOf="@id/darkModeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintRight_toRightOf="@id/toggleTimeSwitch"
+        app:layout_constraintTop_toTopOf="@id/darkModeLabel" />
+
+    <Button
+        android:id="@+id/customizeBtn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Customize Mirror Layout"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="@id/toggleTimeLabel"
+        app:layout_constraintTop_toBottomOf="@id/toggleTimeLabel"
+        />
+    <Button
+        android:id="@+id/notesBtn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Update Notes Module"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="@id/customizeBtn"
+        app:layout_constraintTop_toBottomOf="@id/customizeBtn"
+        />
+    <Button
+        android:id="@+id/preferencesBtn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="User Preferences"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="@id/notesBtn"
+        app:layout_constraintTop_toBottomOf="@id/notesBtn"
         />
 
 
     <LinearLayout
+        android:id="@+id/logoutLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:layout_marginTop="50dp"
-        app:layout_constraintTop_toBottomOf="@id/darkModeLabel"
-        app:layout_constraintLeft_toLeftOf="@id/darkModeLabel"
-        >
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@id/preferencesBtn"
+        app:layout_constraintTop_toBottomOf="@id/preferencesBtn">
 
         <Button
+            android:id="@+id/logOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/logOut"
-            android:text="Logout"
-            />
+            android:text="Logout" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/backToSettingsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:gravity="center|bottom"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="@id/preferencesBtn"
+        app:layout_constraintTop_toBottomOf="@id/preferencesBtn">
+
+        <Button
+            android:id="@+id/backToSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/backToScanLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:gravity="center|bottom"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@id/preferencesBtn"
+        app:layout_constraintTop_toBottomOf="@id/preferencesBtn">
+
+        <Button
+            android:id="@+id/backToScan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back" />
+    </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
