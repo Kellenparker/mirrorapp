@@ -1,44 +1,21 @@
 package com.example.mirrormirror
 
-import android.R.attr
-import android.app.Activity
-import android.app.UiModeManager.MODE_NIGHT_YES
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.AttributeSet
 import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
-import android.view.inputmethod.EditorInfo
 import android.widget.*
-import androidx.navigation.fragment.findNavController
-import com.example.mirrormirror.databinding.FragmentFirstBinding
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat.recreate
-import androidx.core.view.get
-import androidx.core.view.isVisible
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import androidx.fragment.app.Fragment
+import com.example.mirrormirror.databinding.FragmentFirstBinding
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatEditText
-import kotlinx.coroutines.flow.callbackFlow
-import kotlin.math.log
-import android.R.attr.delay
-
-
-
 
 
 /**
@@ -55,239 +32,13 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        super.onCreate(null)
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
-
-        val sharedPreference = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
-        var iconView = binding.iconLayout as ViewGroup
-        var topLeftView = binding.topLeftLayout as ViewGroup
-        var topRightView = binding.topRightLayout as ViewGroup
-        var middleLeftView = binding.middleLeftLayout as ViewGroup
-        var middleRightView = binding.middleRightLayout as ViewGroup
-        var bottomLeftView = binding.bottomLeftLayout as ViewGroup
-        var bottomRightView = binding.bottomRightLayout as ViewGroup
-
-//        iconView.removeAllViews()
-        topLeftView.removeAllViews()
-        topRightView.removeAllViews()
-        middleLeftView.removeAllViews()
-        middleRightView.removeAllViews()
-        bottomLeftView.removeAllViews()
-        bottomRightView.removeAllViews()
-
-        topLeftView.addView(binding.topLeftLabel)
-        topRightView.addView(binding.topRightLabel)
-        middleLeftView.addView(binding.middleLeftLabel)
-        middleRightView.addView(binding.middleRightLabel)
-        bottomLeftView.addView(binding.bottomLeftLabel)
-        bottomRightView.addView(binding.bottomRightLabel)
-
-
-        if (sharedPreference.getString("calendar", "") == "") {
-            updateModule("calendar", -1)
-        }
-        if (sharedPreference.getString("motivation", "") == "") {
-            updateModule("motivation", -1)
-        }
-        if (sharedPreference.getString("notes", "") == "") {
-            updateModule("notes", -1)
-        }
-        if (sharedPreference.getString("news", "") == "") {
-            updateModule("news", -1)
-        }
-        if (sharedPreference.getString("traffic", "") == "") {
-            updateModule("traffic", -1)
-        }
-        if (sharedPreference.getString("weather", "") == "") {
-            updateModule("weather", -1)
-        }
-
-
-        if (sharedPreference.getString("calendar", "") == "topLeft") {
-            iconView.removeView(binding.dragCalendar)
-            topLeftView.addView(binding.dragCalendar)
-        } else if (sharedPreference.getString("calendar", "") == "topRight"){
-            iconView.removeView(binding.dragCalendar)
-            topRightView.addView(binding.dragCalendar)
-        } else if (sharedPreference.getString("calendar", "") == "middleLeft"){
-            iconView.removeView(binding.dragCalendar)
-            middleLeftView.addView(binding.dragCalendar)
-        } else if (sharedPreference.getString("calendar", "") == "middleRight"){
-            iconView.removeView(binding.dragCalendar)
-            middleRightView.addView(binding.dragCalendar)
-        } else if (sharedPreference.getString("calendar", "") == "bottomLeft"){
-            iconView.removeView(binding.dragCalendar)
-            bottomLeftView.addView(binding.dragCalendar)
-        } else if (sharedPreference.getString("calendar", "") == "bottomRight"){
-            iconView.removeView(binding.dragCalendar)
-            bottomRightView.addView(binding.dragCalendar)
-        }
-
-        if (sharedPreference.getString("motivation", "") == "topLeft") {
-            iconView.removeView(binding.dragMotivation)
-            topLeftView.addView(binding.dragMotivation)
-        } else if (sharedPreference.getString("motivation", "") == "topRight"){
-            iconView.removeView(binding.dragMotivation)
-            topRightView.addView(binding.dragMotivation)
-        } else if (sharedPreference.getString("motivation", "") == "middleLeft"){
-            iconView.removeView(binding.dragMotivation)
-            middleLeftView.addView(binding.dragMotivation)
-        } else if (sharedPreference.getString("motivation", "") == "middleRight"){
-            iconView.removeView(binding.dragMotivation)
-            middleRightView.addView(binding.dragMotivation)
-        } else if (sharedPreference.getString("motivation", "") == "bottomLeft"){
-            iconView.removeView(binding.dragMotivation)
-            bottomLeftView.addView(binding.dragMotivation)
-        } else if (sharedPreference.getString("motivation", "") == "bottomRight"){
-            iconView.removeView(binding.dragMotivation)
-            bottomRightView.addView(binding.dragMotivation)
-        }
-
-        if (sharedPreference.getString("notes", "") == "topLeft") {
-            iconView.removeView(binding.dragNotes)
-            topLeftView.addView(binding.dragNotes)
-        } else if (sharedPreference.getString("notes", "") == "topRight"){
-            iconView.removeView(binding.dragNotes)
-            topRightView.addView(binding.dragNotes)
-        } else if (sharedPreference.getString("notes", "") == "middleLeft"){
-            iconView.removeView(binding.dragNotes)
-            middleLeftView.addView(binding.dragNotes)
-        } else if (sharedPreference.getString("notes", "") == "middleRight"){
-            iconView.removeView(binding.dragNotes)
-            middleRightView.addView(binding.dragNotes)
-        } else if (sharedPreference.getString("notes", "") == "bottomLeft"){
-            iconView.removeView(binding.dragNotes)
-            bottomLeftView.addView(binding.dragNotes)
-        } else if (sharedPreference.getString("notes", "") == "bottomRight"){
-            iconView.removeView(binding.dragNotes)
-            bottomRightView.addView(binding.dragNotes)
-        }
-        if (sharedPreference.getString("news", "") == "topLeft") {
-            iconView.removeView(binding.dragNews)
-            topLeftView.addView(binding.dragNews)
-        } else if (sharedPreference.getString("news", "") == "topRight"){
-            iconView.removeView(binding.dragNews)
-            topRightView.addView(binding.dragNews)
-        } else if (sharedPreference.getString("news", "") == "middleLeft"){
-            iconView.removeView(binding.dragNews)
-            middleLeftView.addView(binding.dragNews)
-        } else if (sharedPreference.getString("news", "") == "middleRight"){
-            iconView.removeView(binding.dragNews)
-            middleRightView.addView(binding.dragNews)
-        } else if (sharedPreference.getString("news", "") == "bottomLeft"){
-            iconView.removeView(binding.dragNews)
-            bottomLeftView.addView(binding.dragNews)
-        } else if (sharedPreference.getString("news", "") == "bottomRight"){
-            iconView.removeView(binding.dragNews)
-            bottomRightView.addView(binding.dragNews)
-        }
-        if (sharedPreference.getString("traffic", "") == "topLeft") {
-            iconView.removeView(binding.dragTraffic)
-            topLeftView.addView(binding.dragTraffic)
-        } else if (sharedPreference.getString("traffic", "") == "topRight"){
-            iconView.removeView(binding.dragTraffic)
-            topRightView.addView(binding.dragTraffic)
-        } else if (sharedPreference.getString("traffic", "") == "middleLeft"){
-            iconView.removeView(binding.dragTraffic)
-            middleLeftView.addView(binding.dragTraffic)
-        } else if (sharedPreference.getString("traffic", "") == "middleRight"){
-            iconView.removeView(binding.dragTraffic)
-            middleRightView.addView(binding.dragTraffic)
-        } else if (sharedPreference.getString("traffic", "") == "bottomLeft"){
-            iconView.removeView(binding.dragTraffic)
-            bottomLeftView.addView(binding.dragTraffic)
-        } else if (sharedPreference.getString("traffic", "") == "bottomRight"){
-            iconView.removeView(binding.dragTraffic)
-            bottomRightView.addView(binding.dragTraffic)
-        }
-
-        if (sharedPreference.getString("weather", "") == "topLeft") {
-            iconView.removeView(binding.dragWeather)
-            topLeftView.addView(binding.dragWeather)
-        } else if (sharedPreference.getString("weather", "") == "topRight"){
-            iconView.removeView(binding.dragWeather)
-            topRightView.addView(binding.dragWeather)
-        } else if (sharedPreference.getString("weather", "") == "middleLeft"){
-            iconView.removeView(binding.dragWeather)
-            middleLeftView.addView(binding.dragWeather)
-        } else if (sharedPreference.getString("weather", "") == "middleRight"){
-            iconView.removeView(binding.dragWeather)
-            middleRightView.addView(binding.dragWeather)
-        } else if (sharedPreference.getString("weather", "") == "bottomLeft"){
-            iconView.removeView(binding.dragWeather)
-            bottomLeftView.addView(binding.dragWeather)
-        } else if (sharedPreference.getString("weather", "") == "bottomRight"){
-            iconView.removeView(binding.dragWeather)
-            bottomRightView.addView(binding.dragWeather)
-        }
-
-
-        binding.iconLayout.setOnDragListener(dragListener)
-        binding.topLeftLayout.setOnDragListener(dragListener)
-        binding.topRightLayout.setOnDragListener(dragListener)
-        binding.middleLeftLayout.setOnDragListener(dragListener)
-        binding.middleRightLayout.setOnDragListener(dragListener)
-        binding.bottomLeftLayout.setOnDragListener(dragListener)
-        binding.bottomRightLayout.setOnDragListener(dragListener)
-
-        binding.dragCalendar.setOnLongClickListener{
-            val clipText = "calendar"
-            val item = ClipData.Item(clipText)
-            val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
-            val data = ClipData(clipText, mimeTypes, item)
-            val dragShadowBuilder = View.DragShadowBuilder(it)
-            it.startDragAndDrop(data,dragShadowBuilder,it,0)
-            true
-        }
-        binding.dragMotivation.setOnLongClickListener{
-            val clipText = "motivation"
-            val item = ClipData.Item(clipText)
-            val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
-            val data = ClipData(clipText, mimeTypes, item)
-            val dragShadowBuilder = View.DragShadowBuilder(it)
-            it.startDragAndDrop(data,dragShadowBuilder,it,0)
-            true
-        }
-        binding.dragNews.setOnLongClickListener{
-            val clipText = "news"
-            val item = ClipData.Item(clipText)
-            val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
-            val data = ClipData(clipText, mimeTypes, item)
-            val dragShadowBuilder = View.DragShadowBuilder(it)
-            it.startDragAndDrop(data,dragShadowBuilder,it,0)
-            true
-        }
-        binding.dragNotes.setOnLongClickListener{
-            val clipText = "notes"
-            val item = ClipData.Item(clipText)
-            val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
-            val data = ClipData(clipText, mimeTypes, item)
-            val dragShadowBuilder = View.DragShadowBuilder(it)
-            it.startDragAndDrop(data,dragShadowBuilder,it,0)
-            true
-        }
-        binding.dragTraffic.setOnLongClickListener{
-            val clipText = "traffic"
-            val item = ClipData.Item(clipText)
-            val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
-            val data = ClipData(clipText, mimeTypes, item)
-            val dragShadowBuilder = View.DragShadowBuilder(it)
-            it.startDragAndDrop(data,dragShadowBuilder,it,0)
-            true
-        }
-
-        binding.dragWeather.setOnLongClickListener{
-            val clipText = "weather"
-            val item = ClipData.Item(clipText)
-            val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
-            val data = ClipData(clipText, mimeTypes, item)
-            val dragShadowBuilder = View.DragShadowBuilder(it)
-            it.startDragAndDrop(data,dragShadowBuilder,it,0)
-            true
-        }
         return binding.root
     }
-    val dragListener = View.OnDragListener{ view, event ->
-        when(event.action){
+
+    val dragListener = View.OnDragListener { view, event ->
+        when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
                 event.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
             }
@@ -296,12 +47,13 @@ class SettingsFragment : Fragment() {
                 true
             }
             DragEvent.ACTION_DRAG_LOCATION -> true
-            DragEvent.ACTION_DRAG_EXITED ->{
+            DragEvent.ACTION_DRAG_EXITED -> {
                 view.invalidate()
                 true
             }
             DragEvent.ACTION_DROP -> {
-                val sharedPreference = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+                val sharedPreference =
+                    requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
                 var editor = sharedPreference.edit()
                 Log.d("Event", event.toString())
                 Log.d("view", view.toString())
@@ -312,32 +64,47 @@ class SettingsFragment : Fragment() {
                 val owner = v.parent as ViewGroup
                 val destination = view as LinearLayout
 
-                if (destination.childCount < 2){
+                if (destination.childCount < 2) {
                     var destTag = destination.getTag().toString()
                     var itemTag = v.getTag().toString()
                     editor.putString(itemTag, destTag)
                     editor.commit()
+
+                    // update location in database *******************************
+                    val db = Firebase.firestore
+                    val docRef = db.collection("users")
+                        .document(sharedPreference.getString("userId", "").toString())
+                    docRef
+                        .update(itemTag, destTag)
+                        .addOnSuccessListener {
+                            Log.d(
+                                "Success",
+                                "DocumentSnapshot successfully updated!"
+                            )
+                        }
+                        .addOnFailureListener { e -> Log.w("Error", "Error updating document", e) }
+
                     owner.removeView(v)
                     destination.addView(v)
                     var dest = destination.getTag()
 
-                    if (dest == "iconTray"){
+                    if (dest == "iconTray") {
                         updateModule(dragData, -1)
-                    }else if (dest == "topLeft"){
+                    } else if (dest == "topLeft") {
                         updateModule(dragData, 1)
-                    }else if (dest == "topRight"){
+                    } else if (dest == "topRight") {
                         updateModule(dragData, 5)
-                    }else if (dest == "middleLeft") {
+                    } else if (dest == "middleLeft") {
                         updateModule(dragData, 2)
-                    }else if (dest == "middleRight") {
+                    } else if (dest == "middleRight") {
                         updateModule(dragData, 6)
-                    }else if (dest == "bottomLeft") {
+                    } else if (dest == "bottomLeft") {
                         updateModule(dragData, 3)
-                    }else if (dest == "bottomRight") {
+                    } else if (dest == "bottomRight") {
                         updateModule(dragData, 7)
                     }
 
-                } else if (destination.getTag() == "iconTray"){
+                } else if (destination.getTag() == "iconTray") {
                     var destTag = destination.getTag().toString()
                     var itemTag = v.getTag().toString()
                     editor.putString(itemTag, destTag)
@@ -357,7 +124,7 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    fun updateModule(module: String, location: Int){
+    fun updateModule(module: String, location: Int) {
         val calLocRef = database.getReference("modules/calendar/location")
         val calRef = database.getReference("modules/calendar/disabled")
         val motivLocRef = database.getReference("modules/motivation/location")
@@ -371,37 +138,37 @@ class SettingsFragment : Fragment() {
         val weatherLocRef = database.getReference("modules/weather/location")
         val weatherRef = database.getReference("modules/weather/disabled")
 
-        if (location == -1){
-            if (module == "calendar"){
+        if (location == -1) {
+            if (module == "calendar") {
                 calRef.setValue(true)
-            }else if (module == "motivation"){
+            } else if (module == "motivation") {
                 motivRef.setValue(true)
-            }else if (module == "news"){
+            } else if (module == "news") {
                 newsRef.setValue(true)
-            }else if (module == "notes"){
+            } else if (module == "notes") {
                 notesRef.setValue(true)
-            }else if (module == "traffic"){
+            } else if (module == "traffic") {
                 trafficRef.setValue(true)
-            }else if (module == "weather"){
+            } else if (module == "weather") {
                 weatherRef.setValue(true)
             }
         } else {
-            if (module == "calendar"){
+            if (module == "calendar") {
                 calRef.setValue(false)
                 calLocRef.setValue(location)
-            }else if (module == "motivation"){
+            } else if (module == "motivation") {
                 motivRef.setValue(false)
                 motivLocRef.setValue(location)
-            }else if (module == "news"){
+            } else if (module == "news") {
                 newsRef.setValue(false)
                 newsLocRef.setValue(location)
-            }else if (module == "notes"){
+            } else if (module == "notes") {
                 notesRef.setValue(false)
                 notesLocRef.setValue(location)
-            }else if (module == "traffic"){
+            } else if (module == "traffic") {
                 trafficRef.setValue(false)
                 trafficLocRef.setValue(location)
-            }else if (module == "weather"){
+            } else if (module == "weather") {
                 weatherRef.setValue(false)
                 weatherLocRef.setValue(location)
             }
@@ -409,85 +176,386 @@ class SettingsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val sharedPreference = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+//        super.onViewCreated(view, savedInstanceState)
+        val sharedPreference =
+            requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
         var editor = sharedPreference.edit()
+        var iconView = binding.iconLayout as ViewGroup
+        var topLeftView = binding.topLeftLayout as ViewGroup
+        var topRightView = binding.topRightLayout as ViewGroup
+        var middleLeftView = binding.middleLeftLayout as ViewGroup
+        var middleRightView = binding.middleRightLayout as ViewGroup
+        var bottomLeftView = binding.bottomLeftLayout as ViewGroup
+        var bottomRightView = binding.bottomRightLayout as ViewGroup
 
-//      Notes
-        binding.notesText.setText(sharedPreference.getString("notesText", ""))
-        val notesRef = database.getReference("modules/notes/text")
-        binding.notesText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int,
-                                           count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int,
-                                       before: Int, count: Int) {
-                notesRef.setValue(binding.notesText.text.toString())
-                editor.putString("notesText", binding.notesText.text.toString())
-                editor.commit()
+        topLeftView.removeAllViews()
+        topRightView.removeAllViews()
+        middleLeftView.removeAllViews()
+        middleRightView.removeAllViews()
+        bottomLeftView.removeAllViews()
+        bottomRightView.removeAllViews()
+
+        topLeftView.addView(binding.topLeftLabel)
+        topRightView.addView(binding.topRightLabel)
+        middleLeftView.addView(binding.middleLeftLabel)
+        middleRightView.addView(binding.middleRightLabel)
+        bottomLeftView.addView(binding.bottomLeftLabel)
+        bottomRightView.addView(binding.bottomRightLabel)
+
+
+        // get location in database, set to shared prefrences
+        val db = Firebase.firestore
+        val docRef =
+            db.collection("users").document(sharedPreference.getString("userId", "").toString())
+        docRef.get().addOnSuccessListener { document ->
+//            Log.d("Data", "DocumentSnapshot data: ${document.data}")
+            var calendar = document.data?.get("calendar").toString()
+            var motivation = document.data?.get("motivation").toString()
+            var news = document.data?.get("news").toString()
+            var notes = document.data?.get("notes").toString()
+            var traffic = document.data?.get("traffic").toString()
+            var weather = document.data?.get("weather").toString()
+            var text = document.data?.get("text").toString()
+            var time = document.data?.get("time").toString()
+            var darkMode = document.data?.get("darkMode").toString()
+
+            val sharedPreference =
+                requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+            var editor = sharedPreference.edit()
+            editor.putString("calendar", calendar)
+            editor.putString("motivation", motivation)
+            editor.putString("news", news)
+            editor.putString("notes", notes)
+            editor.putString("traffic", traffic)
+            editor.putString("weather", weather)
+            editor.putString("notesText", text)
+            editor.putString("time", time)
+            editor.putString("darkMode", darkMode)
+            while (!editor.commit()) {
+                Thread.sleep(1000)
             }
-        })
+            binding.notesText.setText(sharedPreference.getString("notesText", ""))
+            binding.helloLabel.setText("Hello, " + sharedPreference.getString("first_name", ""))
 
-        binding.helloLabel.setText("Hello, " + sharedPreference.getString("first_name", ""))
-        if (sharedPreference.getInt("dark_mode", 0) == 0) {
-            binding.darkModeSwitch.isChecked = false
-        }else{
-            binding.darkModeSwitch.isChecked = true
-        }
-        binding.darkModeSwitch.setOnClickListener(){
-            if (binding.darkModeSwitch.isChecked){
-                editor.putInt("dark_mode", 1)
-                editor.commit()
-                triggerRestart(requireActivity())
-            }else{
-                editor.putInt("dark_mode", 0)
-                editor.commit()
-                triggerRestart(requireActivity())
+            //region Drag and Drop stuff *********************************
+            val calendarLoc = sharedPreference.getString("calendar", "")
+            if (calendarLoc == "" || calendarLoc == "iconTray") {
+                updateModule("calendar", -1)
             }
-        }
+            val motivLoc = sharedPreference.getString("motivation", "")
+            if (motivLoc == "" || motivLoc == "iconTray") {
+                updateModule("motivation", -1)
+            }
 
-        //Toggle Time
-        val timeRef = database.getReference("modules/time/disabled")
-        dataReference.child("modules/time/disabled")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val timeRef = dataSnapshot.getValue()
-                    if ( timeRef == false){
-                        binding.toggleTimeSwitch.isChecked = true
-                    }else{
-                        binding.toggleTimeSwitch.isChecked = false
-                    }
+            val notesLoc = sharedPreference.getString("notes", "")
+            if (notesLoc == "" || notesLoc == "iconTray") {
+                updateModule("notes", -1)
+            }
+            val newsLoc = sharedPreference.getString("news", "")
+            if (newsLoc == "" || newsLoc == "iconTray") {
+                updateModule("news", -1)
+            }
+            val trafficLoc = sharedPreference.getString("traffic", "")
+            if (trafficLoc == "" || trafficLoc == "iconTray") {
+                updateModule("traffic", -1)
+            }
+            val weatherLoc = sharedPreference.getString("weather", "")
+            if (weatherLoc == "" || weatherLoc == "iconTray") {
+                updateModule("weather", -1)
+            }
+
+
+            if (sharedPreference.getString("calendar", "") == "topLeft") {
+                iconView.removeView(binding.dragCalendar)
+                topLeftView.addView(binding.dragCalendar)
+                updateModule("calendar", 1)
+            } else if (sharedPreference.getString("calendar", "") == "topRight") {
+                iconView.removeView(binding.dragCalendar)
+                topRightView.addView(binding.dragCalendar)
+                updateModule("calendar", 2)
+            } else if (sharedPreference.getString("calendar", "") == "middleLeft") {
+                iconView.removeView(binding.dragCalendar)
+                middleLeftView.addView(binding.dragCalendar)
+                updateModule("calendar", 3)
+            } else if (sharedPreference.getString("calendar", "") == "middleRight") {
+                iconView.removeView(binding.dragCalendar)
+                middleRightView.addView(binding.dragCalendar)
+                updateModule("calendar", 5)
+            } else if (sharedPreference.getString("calendar", "") == "bottomLeft") {
+                iconView.removeView(binding.dragCalendar)
+                bottomLeftView.addView(binding.dragCalendar)
+                updateModule("calendar", 6)
+            } else if (sharedPreference.getString("calendar", "") == "bottomRight") {
+                iconView.removeView(binding.dragCalendar)
+                bottomRightView.addView(binding.dragCalendar)
+                updateModule("calendar", 7)
+            }
+
+            if (sharedPreference.getString("motivation", "") == "topLeft") {
+                iconView.removeView(binding.dragMotivation)
+                topLeftView.addView(binding.dragMotivation)
+                updateModule("motivation", 1)
+            } else if (sharedPreference.getString("motivation", "") == "topRight") {
+                iconView.removeView(binding.dragMotivation)
+                topRightView.addView(binding.dragMotivation)
+                updateModule("motivation", 2)
+            } else if (sharedPreference.getString("motivation", "") == "middleLeft") {
+                iconView.removeView(binding.dragMotivation)
+                middleLeftView.addView(binding.dragMotivation)
+                updateModule("motivation", 3)
+            } else if (sharedPreference.getString("motivation", "") == "middleRight") {
+                iconView.removeView(binding.dragMotivation)
+                middleRightView.addView(binding.dragMotivation)
+                updateModule("motivation", 5)
+            } else if (sharedPreference.getString("motivation", "") == "bottomLeft") {
+                iconView.removeView(binding.dragMotivation)
+                bottomLeftView.addView(binding.dragMotivation)
+                updateModule("motivation", 6)
+            } else if (sharedPreference.getString("motivation", "") == "bottomRight") {
+                iconView.removeView(binding.dragMotivation)
+                bottomRightView.addView(binding.dragMotivation)
+                updateModule("motivation", 7)
+            }
+
+            if (sharedPreference.getString("notes", "") == "topLeft") {
+                iconView.removeView(binding.dragNotes)
+                topLeftView.addView(binding.dragNotes)
+                updateModule("notes", 1)
+            } else if (sharedPreference.getString("notes", "") == "topRight") {
+                iconView.removeView(binding.dragNotes)
+                topRightView.addView(binding.dragNotes)
+                updateModule("notes", 2)
+            } else if (sharedPreference.getString("notes", "") == "middleLeft") {
+                iconView.removeView(binding.dragNotes)
+                middleLeftView.addView(binding.dragNotes)
+                updateModule("notes", 3)
+            } else if (sharedPreference.getString("notes", "") == "middleRight") {
+                iconView.removeView(binding.dragNotes)
+                middleRightView.addView(binding.dragNotes)
+                updateModule("notes", 5)
+            } else if (sharedPreference.getString("notes", "") == "bottomLeft") {
+                iconView.removeView(binding.dragNotes)
+                bottomLeftView.addView(binding.dragNotes)
+                updateModule("notes", 6)
+            } else if (sharedPreference.getString("notes", "") == "bottomRight") {
+                iconView.removeView(binding.dragNotes)
+                bottomRightView.addView(binding.dragNotes)
+                updateModule("notes", 7)
+            }
+            if (sharedPreference.getString("news", "") == "topLeft") {
+                iconView.removeView(binding.dragNews)
+                topLeftView.addView(binding.dragNews)
+                updateModule("news", 1)
+            } else if (sharedPreference.getString("news", "") == "topRight") {
+                iconView.removeView(binding.dragNews)
+                topRightView.addView(binding.dragNews)
+                updateModule("news", 2)
+            } else if (sharedPreference.getString("news", "") == "middleLeft") {
+                iconView.removeView(binding.dragNews)
+                middleLeftView.addView(binding.dragNews)
+                updateModule("news", 3)
+            } else if (sharedPreference.getString("news", "") == "middleRight") {
+                iconView.removeView(binding.dragNews)
+                middleRightView.addView(binding.dragNews)
+                updateModule("news", 5)
+            } else if (sharedPreference.getString("news", "") == "bottomLeft") {
+                iconView.removeView(binding.dragNews)
+                bottomLeftView.addView(binding.dragNews)
+                updateModule("news", 6)
+            } else if (sharedPreference.getString("news", "") == "bottomRight") {
+                iconView.removeView(binding.dragNews)
+                bottomRightView.addView(binding.dragNews)
+                updateModule("news", 7)
+            }
+            if (sharedPreference.getString("traffic", "") == "topLeft") {
+                iconView.removeView(binding.dragTraffic)
+                topLeftView.addView(binding.dragTraffic)
+                updateModule("traffic", 1)
+            } else if (sharedPreference.getString("traffic", "") == "topRight") {
+                iconView.removeView(binding.dragTraffic)
+                topRightView.addView(binding.dragTraffic)
+                updateModule("traffic", 2)
+            } else if (sharedPreference.getString("traffic", "") == "middleLeft") {
+                iconView.removeView(binding.dragTraffic)
+                middleLeftView.addView(binding.dragTraffic)
+                updateModule("traffic", 3)
+            } else if (sharedPreference.getString("traffic", "") == "middleRight") {
+                iconView.removeView(binding.dragTraffic)
+                middleRightView.addView(binding.dragTraffic)
+                updateModule("traffic", 5)
+            } else if (sharedPreference.getString("traffic", "") == "bottomLeft") {
+                iconView.removeView(binding.dragTraffic)
+                bottomLeftView.addView(binding.dragTraffic)
+                updateModule("traffic", 6)
+            } else if (sharedPreference.getString("traffic", "") == "bottomRight") {
+                iconView.removeView(binding.dragTraffic)
+                bottomRightView.addView(binding.dragTraffic)
+                updateModule("traffic", 7)
+            }
+
+            if (sharedPreference.getString("weather", "") == "topLeft") {
+                iconView.removeView(binding.dragWeather)
+                topLeftView.addView(binding.dragWeather)
+                updateModule("weather", 1)
+            } else if (sharedPreference.getString("weather", "") == "topRight") {
+                iconView.removeView(binding.dragWeather)
+                topRightView.addView(binding.dragWeather)
+                updateModule("weather", 2)
+            } else if (sharedPreference.getString("weather", "") == "middleLeft") {
+                iconView.removeView(binding.dragWeather)
+                middleLeftView.addView(binding.dragWeather)
+                updateModule("weather", 3)
+            } else if (sharedPreference.getString("weather", "") == "middleRight") {
+                iconView.removeView(binding.dragWeather)
+                middleRightView.addView(binding.dragWeather)
+                updateModule("weather", 5)
+            } else if (sharedPreference.getString("weather", "") == "bottomLeft") {
+                iconView.removeView(binding.dragWeather)
+                bottomLeftView.addView(binding.dragWeather)
+                updateModule("weather", 6)
+            } else if (sharedPreference.getString("weather", "") == "bottomRight") {
+                iconView.removeView(binding.dragWeather)
+                bottomRightView.addView(binding.dragWeather)
+                updateModule("weather", 7)
+            }
+
+
+            binding.iconLayout.setOnDragListener(dragListener)
+            binding.topLeftLayout.setOnDragListener(dragListener)
+            binding.topRightLayout.setOnDragListener(dragListener)
+            binding.middleLeftLayout.setOnDragListener(dragListener)
+            binding.middleRightLayout.setOnDragListener(dragListener)
+            binding.bottomLeftLayout.setOnDragListener(dragListener)
+            binding.bottomRightLayout.setOnDragListener(dragListener)
+
+            binding.dragCalendar.setOnLongClickListener {
+                val clipText = "calendar"
+                val item = ClipData.Item(clipText)
+                val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
+                val data = ClipData(clipText, mimeTypes, item)
+                val dragShadowBuilder = View.DragShadowBuilder(it)
+                it.startDragAndDrop(data, dragShadowBuilder, it, 0)
+                true
+            }
+            binding.dragMotivation.setOnLongClickListener {
+                val clipText = "motivation"
+                val item = ClipData.Item(clipText)
+                val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
+                val data = ClipData(clipText, mimeTypes, item)
+                val dragShadowBuilder = View.DragShadowBuilder(it)
+                it.startDragAndDrop(data, dragShadowBuilder, it, 0)
+                true
+            }
+            binding.dragNews.setOnLongClickListener {
+                val clipText = "news"
+                val item = ClipData.Item(clipText)
+                val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
+                val data = ClipData(clipText, mimeTypes, item)
+                val dragShadowBuilder = View.DragShadowBuilder(it)
+                it.startDragAndDrop(data, dragShadowBuilder, it, 0)
+                true
+            }
+            binding.dragNotes.setOnLongClickListener {
+                val clipText = "notes"
+                val item = ClipData.Item(clipText)
+                val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
+                val data = ClipData(clipText, mimeTypes, item)
+                val dragShadowBuilder = View.DragShadowBuilder(it)
+                it.startDragAndDrop(data, dragShadowBuilder, it, 0)
+                true
+            }
+            binding.dragTraffic.setOnLongClickListener {
+                val clipText = "traffic"
+                val item = ClipData.Item(clipText)
+                val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
+                val data = ClipData(clipText, mimeTypes, item)
+                val dragShadowBuilder = View.DragShadowBuilder(it)
+                it.startDragAndDrop(data, dragShadowBuilder, it, 0)
+                true
+            }
+
+            binding.dragWeather.setOnLongClickListener {
+                val clipText = "weather"
+                val item = ClipData.Item(clipText)
+                val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
+                val data = ClipData(clipText, mimeTypes, item)
+                val dragShadowBuilder = View.DragShadowBuilder(it)
+                it.startDragAndDrop(data, dragShadowBuilder, it, 0)
+                true
+            }
+            //endregion ********************************************
+
+            //      Notes
+            val notesRef = database.getReference("modules/notes/text")
+            binding.notesText.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable) {}
+                override fun beforeTextChanged(
+                    s: CharSequence, start: Int,
+                    count: Int, after: Int
+                ) {
                 }
-                override fun onCancelled(error: DatabaseError) {
-                    //This doesn't do anything but will cause errors if you delete it
+                override fun onTextChanged(
+                    s: CharSequence, start: Int,
+                    before: Int, count: Int
+                ) {
+                    notesRef.setValue(binding.notesText.text.toString())
+                    docRef.update("text", binding.notesText.text.toString())
                 }
             })
 
-        binding.toggleTimeSwitch.setOnClickListener(){
-            if (binding.toggleTimeSwitch.isChecked){
-                timeRef.setValue(false)
-            }else{
-                timeRef.setValue(true)
+            if (sharedPreference.getString("darkMode", "") == "false") {
+                binding.darkModeSwitch.isChecked = false
+                docRef.update("darkMode", "false")
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            } else {
+                binding.darkModeSwitch.isChecked = true
+                docRef.update("darkMode", "true")
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
-        }
+            binding.darkModeSwitch.setOnClickListener() {
+                if (binding.darkModeSwitch.isChecked) {
+                    docRef.update("darkMode", "true")
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                } else {
+                    docRef.update("darkMode", "false")
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+            }
 
+            //Toggle Time
+            val timeRef = database.getReference("modules/time/disabled")
+            if (sharedPreference.getString("time", "") == "false") {
+                binding.toggleTimeSwitch.isChecked = false
+                timeRef.setValue(true)
+                docRef.update("time", "false")
 
-        binding.logOut.setOnClickListener(){
-            editor.putString("first_name", "")
-            editor.commit()
-            triggerRestart(requireActivity())
+            } else {
+                binding.toggleTimeSwitch.isChecked = true
+                timeRef.setValue(false)
+                docRef.update("time", "true")
+            }
+            binding.toggleTimeSwitch.setOnClickListener() {
+                if (binding.toggleTimeSwitch.isChecked) {
+                    timeRef.setValue(false)
+                    docRef.update("time", "true")
+                } else {
+                    timeRef.setValue(true)
+                    docRef.update("time", "false")
+                }
+            }
+            binding.logOut.setOnClickListener() {
+                editor.putString("first_name", "")
+                editor.commit()
+                requireActivity().finish()
+                val intent = Intent (requireContext(), MainActivity::class.java)
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                startActivity(intent)
+                Runtime.getRuntime().exit(0)
+            }
+        }.addOnFailureListener { exception ->
+            Log.d("Error", "get failed with ", exception)
         }
     }
-    fun triggerRestart(context: Activity) {
-        val intent = Intent(context, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(intent)
-        if (context is Activity) {
-            (context as Activity).finish()
-        }
-        Runtime.getRuntime().exit(0)
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -45,14 +45,16 @@ class CreateUser : AppCompatActivity() {
         var emailAddress = ""
         var userPassword = ""
         var emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
-        var passPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#^@$!%*?*&+=])[A-Za-z\\d@\$!%*?&#^=+]{6,}\$"
+        var passPattern =
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#^@$!%*?*&+=])[A-Za-z\\d@\$!%*?&#^=+]{6,}\$"
         val database = Firebase.database
         var auth: FirebaseAuth
         auth = Firebase.auth
         val db = Firebase.firestore
+        val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
 //        var dataReference = database.getReference()
 
-        createAccountBtn.setOnClickListener{
+        createAccountBtn.setOnClickListener {
             errorMsg.setText("")
             createUserLabel.setText("Create User")
             alreadyUser.visibility = View.INVISIBLE
@@ -117,15 +119,15 @@ class CreateUser : AppCompatActivity() {
             }
         }
 
-        signIn.setOnClickListener{
+        signIn.setOnClickListener {
             errorMsg.setText("")
-            if (email.text.isEmpty()){
+            if (email.text.isEmpty()) {
                 errorMsg.setText("Please enter your email address.")
-            }else if (!email.text.toString().trim { it <= ' ' }.matches(emailPattern.toRegex())) {
+            } else if (!email.text.toString().trim { it <= ' ' }.matches(emailPattern.toRegex())) {
                 errorMsg.setText("Invalid email address. Please try again.")
-            }else if (password.text.isEmpty()) {
+            } else if (password.text.isEmpty()) {
                 errorMsg.setText("Please enter a password.")
-            }else {
+            } else {
                 val resultIntent = Intent()
                 emailAddress = email.text.toString()
                 userPassword = password.text.toString()
@@ -139,24 +141,21 @@ class CreateUser : AppCompatActivity() {
                             val docRef = db.collection("users").document(uid)
                             docRef.get().addOnSuccessListener { document ->
                                 if (document != null) {
-                                    Log.d("Data", "DocumentSnapshot data: ${document.data}")
+//                                    Log.d("Data", "DocumentSnapshot data: ${document.data}")
                                     age = document.data?.get("age").toString().toInt()
                                     genderVar = document.data?.get("gender").toString().toInt()
                                     firstName = document.data?.get("fname").toString()
                                     lastName = document.data?.get("lname").toString()
                                     emailAddress = document.data?.get("emailAddress").toString()
                                     resultIntent.putExtra("firstName", firstName)
-                                    val ageRef = database.getReference("user/age/")
-                                    val genderRef = database.getReference("user/gender/")
-                                    ageRef.setValue(age)
-                                    genderRef.setValue(genderVar)
+                                    resultIntent.putExtra("userId", uid)
                                     setResult(Activity.RESULT_OK, resultIntent)
                                     finish()
                                 } else {
                                     Log.d("Error", "No such document")
                                 }
                             }.addOnFailureListener { exception ->
-                                    Log.d("Error", "get failed with ", exception)
+                                Log.d("Error", "get failed with ", exception)
                             }
                         } else {
                             // If sign in fails, display a message to the user.
@@ -166,29 +165,29 @@ class CreateUser : AppCompatActivity() {
                     }
             }
         }
-
         createBtn.setOnClickListener {
             errorMsg.setText("")
-            if (email.text.isEmpty()){
+            if (email.text.isEmpty()) {
                 errorMsg.setText("Please enter your email address.")
-            }else if (!email.text.toString().trim { it <= ' ' }.matches(emailPattern.toRegex())) {
+            } else if (!email.text.toString().trim { it <= ' ' }.matches(emailPattern.toRegex())) {
                 errorMsg.setText("Invalid email address. Please try again.")
-            }else if (password.text.isEmpty()) {
+            } else if (password.text.isEmpty()) {
                 errorMsg.setText("Please enter a password.")
-            }else if (!password.text.toString().trim { it <= ' ' }.matches(passPattern.toRegex())){
+            } else if (!password.text.toString().trim { it <= ' ' }
+                    .matches(passPattern.toRegex())) {
                 errorMsg.setText("Password must contain at least 6 characters, an upper and lower case letter, a number, and a special character.")
-            }else if (fname.text.isEmpty()){
+            } else if (fname.text.isEmpty()) {
                 errorMsg.setText("Please enter your first name.")
-            }else if (lname.text.isEmpty()){
+            } else if (lname.text.isEmpty()) {
                 errorMsg.setText("Please enter your last name.")
-            }else if (radioGroup.checkedRadioButtonId == -1){
+            } else if (radioGroup.checkedRadioButtonId == -1) {
                 errorMsg.setText("Please enter your gender.")
-            }else{
-                if (male.isChecked){
+            } else {
+                if (male.isChecked) {
                     genderVar = 0
-                }else if (female.isChecked){
+                } else if (female.isChecked) {
                     genderVar = 1
-                }else if (nonbinary.isChecked){
+                } else if (nonbinary.isChecked) {
                     genderVar = 2
                 }
 
@@ -211,7 +210,16 @@ class CreateUser : AppCompatActivity() {
                                 "emailAddress" to emailAddress,
                                 "age" to age,
                                 "gender" to genderVar,
-                                "uid" to uid
+                                "uid" to uid,
+                                "calendar" to "",
+                                "motivation" to "",
+                                "news" to "",
+                                "notes" to "",
+                                "traffic" to "",
+                                "weather" to "",
+                                "text" to "",
+                                "time" to "true",
+                                "darkMode" to "false"
                             )
                             db.collection("users").document(uid).set(userData)
                                 .addOnSuccessListener {
@@ -220,19 +228,24 @@ class CreateUser : AppCompatActivity() {
                                     val genderRef = database.getReference("user/gender/")
                                     ageRef.setValue(age)
                                     genderRef.setValue(genderVar)
-                                }.addOnFailureListener { e -> Log.w("Error", "Error writing document", e) }
+                                }.addOnFailureListener { e ->
+                                    Log.w(
+                                        "Error",
+                                        "Error writing document",
+                                        e
+                                    )
+                                }
+                            resultIntent.putExtra("userId", uid)
                             setResult(Activity.RESULT_OK, resultIntent)
                             finish()
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("Error", "createUserWithEmail:failure", task.exception)
-                            Toast.makeText(baseContext, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
+                            errorMsg.setText("Email address is already in use or invalid.")
                         }
                     }
             }
         }
-
     }
 
     override fun onBackPressed() {
