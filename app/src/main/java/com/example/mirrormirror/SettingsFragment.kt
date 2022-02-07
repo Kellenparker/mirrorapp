@@ -14,6 +14,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
@@ -40,7 +42,7 @@ class SettingsFragment : Fragment() {
         super.onCreate(null)
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         requireActivity().onBackPressedDispatcher.addCallback() {
-            // With blank your fragment BackPressed will be disabled.
+            // Disable android back button
         }
         return binding.root
     }
@@ -184,6 +186,8 @@ class SettingsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val sharedPreference = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+        var editor = sharedPreference.edit()
         // Button control**************************************
         binding.customizeBtn.setOnClickListener{
             binding.instructionsLabel.visibility = View.VISIBLE
@@ -199,6 +203,8 @@ class SettingsFragment : Fragment() {
             binding.logoutLayout.visibility = View.GONE
             binding.backToSettingsLayout.visibility = View.VISIBLE
             binding.backToScanLayout.visibility = View.GONE
+            binding.logoutLayout.visibility = View.GONE
+            binding.ageGenderLayout.visibility = View.GONE
         }
         binding.notesBtn.setOnClickListener{
             binding.instructionsLabel.visibility = View.GONE
@@ -214,6 +220,8 @@ class SettingsFragment : Fragment() {
             binding.logoutLayout.visibility = View.GONE
             binding.backToSettingsLayout.visibility = View.VISIBLE
             binding.backToScanLayout.visibility = View.GONE
+            binding.logoutLayout.visibility = View.GONE
+            binding.ageGenderLayout.visibility = View.GONE
         }
         binding.preferencesBtn.setOnClickListener{
             binding.instructionsLabel.visibility = View.GONE
@@ -229,21 +237,8 @@ class SettingsFragment : Fragment() {
             binding.logoutLayout.visibility = View.GONE
             binding.backToSettingsLayout.visibility = View.VISIBLE
             binding.backToScanLayout.visibility = View.GONE
-        }
-        binding.backToSettings.setOnClickListener{
-            binding.instructionsLabel.visibility = View.GONE
-            binding.masterLayout.visibility = View.GONE
-            binding.notesText.visibility = View.GONE
-            binding.toggleTimeLabel.visibility = View.GONE
-            binding.toggleTimeSwitch.visibility = View.GONE
-            binding.darkModeLabel.visibility = View.GONE
-            binding.darkModeSwitch.visibility = View.GONE
-            binding.customizeBtn.visibility = View.VISIBLE
-            binding.notesBtn.visibility = View.VISIBLE
-            binding.preferencesBtn.visibility = View.VISIBLE
-            binding.logoutLayout.visibility = View.GONE
-            binding.backToSettingsLayout.visibility = View.GONE
-            binding.backToScanLayout.visibility = View.VISIBLE
+            binding.ageGenderLayout.visibility = View.VISIBLE
+            binding.logoutLayout.visibility = View.VISIBLE
         }
         binding.backToScan.setOnClickListener{
             requireActivity().finish()
@@ -251,8 +246,6 @@ class SettingsFragment : Fragment() {
 
 
 
-        //*****************************************************
-        val sharedPreference = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
         var iconView = binding.iconLayout as ViewGroup
         var topLeftView = binding.topLeftLayout as ViewGroup
         var topRightView = binding.topRightLayout as ViewGroup
@@ -293,7 +286,6 @@ class SettingsFragment : Fragment() {
 
             val sharedPreference =
                 requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
-            var editor = sharedPreference.edit()
             editor.putString("calendar", calendar)
             editor.putString("motivation", motivation)
             editor.putString("news", news)
@@ -557,6 +549,51 @@ class SettingsFragment : Fragment() {
             }
             //endregion ********************************************
 
+            //*****************************************************
+            // For age and gender in user preferences**************
+            binding.age1.minValue = 0
+            binding.age1.maxValue = 120
+            binding.age1.wrapSelectorWheel = true
+            binding.age1.value = sharedPreference.getInt("age", 0)
+            val ageRef = database.getReference("user/age")
+            val genderRef = database.getReference("user/gender")
+            binding.age1.setOnValueChangedListener { picker, oldVal, newVal ->
+                editor.putInt("age", newVal)
+                editor.commit()
+                ageRef.setValue(newVal)
+                docRef.update("age", newVal)
+            }
+
+            if (sharedPreference.getInt("gender", 0)  == 0){
+                binding.male.isChecked = true
+            }else if (sharedPreference.getInt("gender", 0)  == 1){
+                binding.female.isChecked = true
+            }else if (sharedPreference.getInt("gender", 0)  == 2){
+                binding.nonbinary.isChecked = true
+            }
+            binding.gender1.setOnCheckedChangeListener(RadioGroup.OnCheckedChangeListener { group, checkedId ->
+                val radio: RadioButton = group.findViewById(checkedId)
+                if (radio.text.toString() == "Male"){
+                    editor.putInt("gender", 0)
+                    genderRef.setValue(0)
+                    docRef.update("gender", 0)
+                }else if (radio.text.toString() == "Female"){
+                    editor.putInt("gender", 1)
+                    genderRef.setValue(1)
+                    docRef.update("gender", 1)
+                }else if (radio.text.toString() == "Other"){
+                    editor.putInt("gender", 2)
+                    genderRef.setValue(2)
+                    docRef.update("gender", 2)
+                }
+                editor.commit()
+            })
+
+
+
+
+            //*****************************************************
+
             //      Notes
             val notesRef = database.getReference("modules/notes/text")
             binding.notesText.addTextChangedListener(object : TextWatcher {
@@ -594,22 +631,25 @@ class SettingsFragment : Fragment() {
                         binding.notesText.append(newText)
                     }
                     notesRef.setValue(binding.notesText.text.toString())
-                    docRef.update("text", binding.notesText.text.toString())
+//                    docRef.update("text", binding.notesText.text.toString())
                 }
             })
 
             if (sharedPreference.getString("darkMode", "") == "false") {
                 binding.darkModeSwitch.isChecked = false
-                docRef.update("darkMode", "false")
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             } else {
                 binding.darkModeSwitch.isChecked = true
-                docRef.update("darkMode", "true")
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
             binding.darkModeSwitch.setOnClickListener() {
                 if (binding.darkModeSwitch.isChecked) {
-                    docRef.update("darkMode", "true")
+                    Log.d("Hello", docRef.toString())
+                    docRef.update("darkMode", "true").addOnSuccessListener {
+                        Log.d("Hello", "success")
+                    }.addOnFailureListener{
+                        Log.d("Hello", "fail")
+                    }
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 } else {
                     docRef.update("darkMode", "false")
@@ -648,6 +688,26 @@ class SettingsFragment : Fragment() {
                 startActivity(intent)
                 Runtime.getRuntime().exit(0)
             }
+            //Back to settings with updating notes
+            binding.backToSettings.setOnClickListener{
+                binding.instructionsLabel.visibility = View.GONE
+                binding.masterLayout.visibility = View.GONE
+                binding.notesText.visibility = View.GONE
+                binding.toggleTimeLabel.visibility = View.GONE
+                binding.toggleTimeSwitch.visibility = View.GONE
+                binding.darkModeLabel.visibility = View.GONE
+                binding.darkModeSwitch.visibility = View.GONE
+                binding.customizeBtn.visibility = View.VISIBLE
+                binding.notesBtn.visibility = View.VISIBLE
+                binding.preferencesBtn.visibility = View.VISIBLE
+                binding.logoutLayout.visibility = View.GONE
+                binding.backToSettingsLayout.visibility = View.GONE
+                binding.backToScanLayout.visibility = View.VISIBLE
+                binding.logoutLayout.visibility = View.GONE
+                binding.ageGenderLayout.visibility = View.GONE
+                docRef.update("text", binding.notesText.text.toString())
+            }
+
         }.addOnFailureListener { exception ->
             Log.d("Error", "get failed with ", exception)
         }
