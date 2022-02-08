@@ -13,7 +13,7 @@
         android:layout_marginLeft="25dp"
         android:layout_marginTop="5dp"
         android:text="Hello"
-        android:textColor="#002F6E"
+        android:textColor="@color/textColor2"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -40,6 +40,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="25dp"
         android:text="Customize Mirror Layout"
+        android:textColor="@color/textColor"
         android:textAllCaps="false"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/horizontalLine"
@@ -55,6 +56,7 @@
         android:text="Update Notes Module"
         android:textAllCaps="false"
         android:visibility="visible"
+        android:textColor="@color/textColor"
         app:layout_constraintLeft_toLeftOf="@id/customizeBtn"
         app:layout_constraintTop_toBottomOf="@id/customizeBtn" />
 
@@ -66,6 +68,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="25dp"
         android:text="User Preferences"
+        android:textColor="@color/textColor"
         android:textAllCaps="false"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/notesBtn"
@@ -100,7 +103,7 @@
             android:id="@+id/iconLayout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/white"
+            android:background="@color/textColor3"
             android:gravity="center"
             android:orientation="horizontal"
             android:tag="iconTray">
@@ -484,6 +487,7 @@
             android:id="@+id/logOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
             android:text="Logout" />
     </LinearLayout>
 
@@ -502,6 +506,8 @@
             android:id="@+id/backToScan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
+            android:textColor="@color/textColor"
             android:text="Back" />
     </LinearLayout>
 
@@ -520,6 +526,7 @@
             android:id="@+id/backToSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
             android:text="Back" />
     </LinearLayout>
 

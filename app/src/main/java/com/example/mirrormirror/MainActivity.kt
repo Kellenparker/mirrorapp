@@ -122,20 +122,27 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
 
+
                         override fun onCancelled(error: DatabaseError) {
                             //This doesn't do anything but will cause errors if you delete it
                         }
                     })
             }
         }
+        // Set Dark mode based on user preferences
+        if (sharedPreference.getString("darkMode", "false") == "false") {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == SECOND_ACTIVITY_REQUEST_CODE) {
             //Make sure everything went ok from the create user page and save their name and uid
             if (resultCode == Activity.RESULT_OK) {
-                val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
                 var editor = sharedPreference.edit()
                 val returnFirstName = data?.getStringExtra("firstName")
                 val returnUserId = data?.getStringExtra("userId")
@@ -160,7 +167,7 @@ class MainActivity : AppCompatActivity() {
                     var age = document.data?.get("age").toString().toInt()
                     var gender = document.data?.get("gender").toString().toInt()
 
-                    val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
+//                    val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
                     editor.putString("calendar", calendar)
                     editor.putString("motivation", motivation)
                     editor.putString("news", news)
@@ -176,7 +183,7 @@ class MainActivity : AppCompatActivity() {
                         Thread.sleep(1000)
                     }
                     // Set Dark mode based on user preferences
-                    if (darkMode == "false") {
+                    if (sharedPreference.getString("darkMode", "false") == "false") {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     } else {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
