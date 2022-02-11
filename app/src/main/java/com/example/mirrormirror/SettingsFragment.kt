@@ -42,7 +42,6 @@ class SettingsFragment : Fragment() {
         super.onCreate(null)
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
 
-
         requireActivity().onBackPressedDispatcher.addCallback() {
             // Disable android back button
         }
@@ -191,7 +190,7 @@ class SettingsFragment : Fragment() {
 
     // When the settings view is created
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+//        super.onViewCreated(view, savedInstanceState)
         // Initialize variables for saving information when app is closed.
         val sharedPreference = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
         var editor = sharedPreference.edit()

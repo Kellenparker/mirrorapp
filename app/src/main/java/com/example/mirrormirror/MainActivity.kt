@@ -36,9 +36,11 @@ class MainActivity : AppCompatActivity() {
         //If user is not already signed in, make them sign in or create an account
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (sharedPreference.getString("first_name", "") == "") {
-            val intent = Intent(this, CreateUser::class.java)
-            startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
+        if (savedInstanceState == null){
+            if (sharedPreference.getString("first_name", "") == "") {
+                val intent = Intent(this, CreateUser::class.java)
+                startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
+            }
         }
 
 
