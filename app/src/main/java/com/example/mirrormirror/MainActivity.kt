@@ -341,16 +341,22 @@ class MainActivity : AppCompatActivity() {
         if (location == -1) {
             if (module == "calendar") {
                 calRef.setValue(true)
+                calLocRef.setValue(location)
             } else if (module == "motivation") {
                 motivRef.setValue(true)
+                motivLocRef.setValue(location)
             } else if (module == "news") {
                 newsRef.setValue(true)
+                newsLocRef.setValue(location)
             } else if (module == "notes") {
                 notesRef.setValue(true)
+                notesLocRef.setValue(location)
             } else if (module == "traffic") {
                 trafficRef.setValue(true)
+                trafficLocRef.setValue(location)
             } else if (module == "weather") {
                 weatherRef.setValue(true)
+                weatherLocRef.setValue(location)
             }
         } else {
             if (module == "calendar") {

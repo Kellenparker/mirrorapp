@@ -75,6 +75,7 @@ class SettingsFragment : Fragment() {
                 val v = event.localState as View
                 val owner = v.parent as ViewGroup
                 val destination = view as LinearLayout
+                val db = Firebase.firestore
 
                 if (destination.childCount < 2) {
                     var destTag = destination.getTag().toString()
@@ -83,7 +84,6 @@ class SettingsFragment : Fragment() {
                     editor.commit()
 
                     // update location in database *******************************
-                    val db = Firebase.firestore
                     val docRef = db.collection("users")
                         .document(sharedPreference.getString("userId", "").toString())
                     docRef
@@ -121,6 +121,18 @@ class SettingsFragment : Fragment() {
                     var itemTag = v.getTag().toString()
                     editor.putString(itemTag, destTag)
                     editor.commit()
+                    //update location in firestore
+                    val docRef = db.collection("users")
+                        .document(sharedPreference.getString("userId", "").toString())
+                    docRef
+                        .update(itemTag, destTag)
+                        .addOnSuccessListener {
+                            Log.d(
+                                "Success",
+                                "DocumentSnapshot successfully updated!"
+                            )
+                        }
+                        .addOnFailureListener { e -> Log.w("Error", "Error updating document", e) }
                     owner.removeView(v)
                     destination.addView(v)
                     updateModule(dragData, -1)
@@ -154,16 +166,22 @@ class SettingsFragment : Fragment() {
         if (location == -1) {
             if (module == "calendar") {
                 calRef.setValue(true)
+                calLocRef.setValue(location)
             } else if (module == "motivation") {
                 motivRef.setValue(true)
+                motivLocRef.setValue(location)
             } else if (module == "news") {
                 newsRef.setValue(true)
+                newsLocRef.setValue(location)
             } else if (module == "notes") {
                 notesRef.setValue(true)
+                notesLocRef.setValue(location)
             } else if (module == "traffic") {
                 trafficRef.setValue(true)
+                trafficLocRef.setValue(location)
             } else if (module == "weather") {
                 weatherRef.setValue(true)
+                weatherLocRef.setValue(location)
             }
         } else {
             if (module == "calendar") {
