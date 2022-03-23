@@ -168,6 +168,7 @@ class MainActivity : AppCompatActivity() {
                     var darkMode = document.data?.get("darkMode").toString()
                     var age = document.data?.get("age").toString().toInt()
                     var gender = document.data?.get("gender").toString().toInt()
+                    var firstname = document.data?.get("fname").toString()
 
 //                    val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
                     editor.putString("calendar", calendar)
@@ -191,7 +192,7 @@ class MainActivity : AppCompatActivity() {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     }
 
-                    //Update notes text, time, age, gender
+                    //Update notes text, time, age, gender, name
                     val textRef = database.getReference("modules/notes/text")
                     textRef.setValue(sharedPreference.getString("notesText", ""))
 
@@ -207,6 +208,9 @@ class MainActivity : AppCompatActivity() {
 
                     val genderRef = database.getReference("user/gender")
                     genderRef.setValue(sharedPreference.getInt("gender", 0))
+
+                    val nameRef = database.getReference("user/name")
+                    nameRef.setValue(firstname)
 
                     //Update realtime database module locations from firestore
                     val calendarLoc = sharedPreference.getString("calendar", "")
