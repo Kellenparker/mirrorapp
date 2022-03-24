@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
@@ -49,6 +50,12 @@ class MainActivity : AppCompatActivity() {
         val listLinks = findViewById<ListView>(R.id.linksListView)
         val loadingIcon = findViewById<ImageView>(R.id.loading)
         val continueButton = findViewById<Button>(R.id.continueBtn)
+        val voiceCommandsButton = findViewById<Button>(R.id.voiceCommandsBtn)
+        val voiceCommands = findViewById<TextView>(R.id.voiceCommands)
+        val noBtn = findViewById<Button>(R.id.noBtn)
+        val yesBtn = findViewById<Button>(R.id.yesBtn)
+        val startOver = findViewById<TextView>(R.id.startOver)
+        val wait = findViewById<TextView>(R.id.pleaseWait)
         val stageRef2 = database.getReference("scan/stage")
 
         val capRef = database.getReference("scan/camera/capture")
@@ -56,13 +63,23 @@ class MainActivity : AppCompatActivity() {
         lateinit var mdatabase: DatabaseReference
         mdatabase = Firebase.database.reference
 
+        voiceCommandsButton.setOnClickListener {
+            if (listLinks.isVisible) {
+                voiceCommands.isVisible = true
+                listLinks.isVisible = false
+            }else if (loadingIcon.isVisible){
+                voiceCommands.isVisible = true
+                loadingIcon.isVisible = false
+            }else if(voiceCommands.isVisible){
+                voiceCommands.isVisible = false
+                listLinks.isVisible = true
+            }else if(!voiceCommands.isVisible){
+                voiceCommands.isVisible = true
+            }
+
+        }
+
         capBtn.setOnClickListener {
-            var reference = ""
-            var reference2 = ""
-            var reference3 = ""
-            var listItems = mutableListOf<String>()
-            val listItems2 = mutableListOf<String>()
-            val listItems3 = mutableListOf<String>()
             stageRef2.setValue(1)
             capRef.setValue(true)
             loadingIcon.setImageResource(R.drawable.centerwhite)
@@ -70,67 +87,109 @@ class MainActivity : AppCompatActivity() {
             capBtn.isVisible = false
             loadingIcon.isVisible = true
             listLinks.isVisible = false
+            noBtn.isVisible = false
+            yesBtn.isVisible = false
+            startOver.isVisible = false
+            voiceCommandsButton.isVisible = false
+            voiceCommands.isVisible = false
+            wait.isVisible = false
 
             continueButton.setOnClickListener() {
+                loadingIcon.isVisible = false
+                listLinks.isVisible = false
+                continueButton.isVisible = false
+                capBtn.isVisible = false
+                noBtn.isVisible = true
+                yesBtn.isVisible = true
+                startOver.isVisible = true
+                wait.isVisible = false
+            }
+
+            noBtn.setOnClickListener{
                 stageRef2.setValue(2)
                 Glide.with(this).load(R.drawable.loadingicon2).into(loadingIcon)
                 loadingIcon.isVisible = true
                 listLinks.isVisible = false
                 continueButton.isVisible = false
+                capBtn.isVisible = false
+                startOver.isVisible = false
+                noBtn.isVisible = false
+                yesBtn.isVisible = false
+                wait.isVisible = true
+            }
+
+            yesBtn.setOnClickListener{
+                stageRef2.setValue(0)
+                loadingIcon.isVisible = false
+                listLinks.isVisible = true
+                continueButton.isVisible = false
                 capBtn.isVisible = true
-                dataReference.child("scan/stage")
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            val stageRef = dataSnapshot.getValue().toString()
-                            if (stageRef == "3") {
-                                loadingIcon.isVisible = false
-                                listLinks.isVisible = true
-                                for (i in 0..45) {
-                                    mdatabase.child("scan/links/link$i/linkUrl").get()
+                noBtn.isVisible = false
+                yesBtn.isVisible = false
+                startOver.isVisible = false
+                voiceCommandsButton.isVisible = true
+                wait.isVisible = false
+            }
+        }
+        var reference = ""
+        var reference2 = ""
+        var reference3 = ""
+        var listItems = mutableListOf<String>()
+        val listItems2 = mutableListOf<String>()
+        val listItems3 = mutableListOf<String>()
+
+        dataReference.child("scan/stage")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val stageRef = dataSnapshot.getValue().toString()
+                    if (stageRef == "3") {
+                        voiceCommandsButton.isVisible = true
+                        loadingIcon.isVisible = false
+                        listLinks.isVisible = true
+                        capBtn.isVisible = true
+                        for (i in 0..45) {
+                            mdatabase.child("scan/links/link$i/linkUrl").get()
+                                .addOnSuccessListener {
+                                    reference = it.value.toString()
+                                    listItems.add(reference)
+                                    mdatabase.child("scan/links/link$i/linkTitle").get()
                                         .addOnSuccessListener {
-                                            reference = it.value.toString()
-                                            listItems.add(reference)
-                                            mdatabase.child("scan/links/link$i/linkTitle").get()
-                                                .addOnSuccessListener {
-                                                    reference2 = it.value.toString()
-                                                    listItems2.add(reference2)
-                                                    mdatabase.child("scan/links/link$i/linkImg")
-                                                        .get().addOnSuccessListener {
-                                                            reference3 = it.value.toString()
-                                                            listItems3.add(reference3)
-                                                            mdatabase.child("scan/stage").get()
-                                                                .addOnSuccessListener() {
-                                                                    val myListAdapter =
-                                                                        MyListAdapter(
-                                                                            this@MainActivity,
-                                                                            listItems,
-                                                                            listItems2,
-                                                                            listItems3
-                                                                        )
-                                                                    listLinks.adapter =
-                                                                        myListAdapter
-                                                                }
+                                            reference2 = it.value.toString()
+                                            listItems2.add(reference2)
+                                            mdatabase.child("scan/links/link$i/linkImg")
+                                                .get().addOnSuccessListener {
+                                                    reference3 = it.value.toString()
+                                                    listItems3.add(reference3)
+                                                    mdatabase.child("scan/stage").get()
+                                                        .addOnSuccessListener() {
+                                                            val myListAdapter =
+                                                                MyListAdapter(
+                                                                    this@MainActivity,
+                                                                    listItems,
+                                                                    listItems2,
+                                                                    listItems3
+                                                                )
+                                                            listLinks.adapter =
+                                                                myListAdapter
                                                         }
                                                 }
                                         }
                                 }
-                                listLinks.setOnItemClickListener { parent, _, position, _ ->
-                                    val selectedItem = parent.getItemAtPosition(position) as String
-                                    val openURL = Intent(android.content.Intent.ACTION_VIEW)
-                                    openURL.data =
-                                        Uri.parse("https://www.amazon.com" + selectedItem)
-                                    startActivity(openURL)
-                                }
-                            }
                         }
-
-
-                        override fun onCancelled(error: DatabaseError) {
-                            //This doesn't do anything but will cause errors if you delete it
+                        listLinks.setOnItemClickListener { parent, _, position, _ ->
+                            val selectedItem = parent.getItemAtPosition(position) as String
+                            val openURL = Intent(android.content.Intent.ACTION_VIEW)
+                            openURL.data =
+                                Uri.parse("https://www.amazon.com" + selectedItem)
+                            startActivity(openURL)
                         }
-                    })
-            }
-        }
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    //This doesn't do anything but will cause errors if you delete it
+                }
+            })
+
         // Set Dark mode based on user preferences
         if (sharedPreference.getString("darkMode", "false") == "false") {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
