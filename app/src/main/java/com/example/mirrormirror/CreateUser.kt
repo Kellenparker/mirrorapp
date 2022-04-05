@@ -212,7 +212,9 @@ class CreateUser : AppCompatActivity() {
                                 "weather" to "",
                                 "text" to "",
                                 "time" to "true",
-                                "darkMode" to "false"
+                                "darkMode" to "false",
+                                "source" to "1600 Pennsylvania Avenue NW, Washington, DC 20500",
+                                "destination" to "First St SE, Washington, DC 20004"
                             )
                             db.collection("users").document(uid).set(userData)
                                 .addOnSuccessListener {

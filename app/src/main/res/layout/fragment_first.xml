@@ -467,6 +467,59 @@
         app:layout_constraintRight_toRightOf="@id/darkModeLabel"
         app:layout_constraintTop_toTopOf="@id/darkModeLabel" />
 
+    <TextView
+        android:id="@+id/startingLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="25dp"
+        android:text="Traffic Starting Point: (Street, City, State Zip)"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@+id/darkModeLabel"
+        app:layout_constraintTop_toBottomOf="@id/darkModeLabel" />
+    <EditText
+        android:id="@+id/starting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:inputType="textPostalAddress"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@id/startingLabel"
+        app:layout_constraintTop_toBottomOf="@id/startingLabel"
+        />
+    <TextView
+        android:id="@+id/destinationLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="25dp"
+        android:text="Traffic Destination: (Street, City, State Zip)"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@+id/starting"
+        app:layout_constraintTop_toBottomOf="@id/starting" />
+    <EditText
+        android:id="@+id/destination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:inputType="textPostalAddress"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@id/destinationLabel"
+        app:layout_constraintTop_toBottomOf="@id/destinationLabel"
+        />
+    <Button
+        android:id="@+id/update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="125dp"
+        android:layout_marginRight="125dp"
+        android:visibility="gone"
+        android:text="Update Traffic"
+        app:layout_constraintLeft_toLeftOf="@id/destination"
+        app:layout_constraintTop_toBottomOf="@id/destination"
+        />
 
 
 
@@ -474,14 +527,14 @@
         android:id="@+id/logoutLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone"
-        app:layout_constraintLeft_toLeftOf="@id/darkModeLabel"
-        app:layout_constraintTop_toBottomOf="@id/darkModeLabel">
+        app:layout_constraintLeft_toLeftOf="@id/update"
+        app:layout_constraintTop_toBottomOf="@id/update">
 
         <Button
             android:id="@+id/logOut"

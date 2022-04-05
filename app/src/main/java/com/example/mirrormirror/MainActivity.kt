@@ -95,6 +95,7 @@ class MainActivity : AppCompatActivity() {
             wait.isVisible = false
 
             continueButton.setOnClickListener() {
+                stageRef2.setValue(2)
                 loadingIcon.isVisible = false
                 listLinks.isVisible = false
                 continueButton.isVisible = false
@@ -106,19 +107,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             noBtn.setOnClickListener{
-                stageRef2.setValue(2)
-                Glide.with(this).load(R.drawable.loadingicon2).into(loadingIcon)
-                loadingIcon.isVisible = true
-                listLinks.isVisible = false
-                continueButton.isVisible = false
-                capBtn.isVisible = false
-                startOver.isVisible = false
-                noBtn.isVisible = false
-                yesBtn.isVisible = false
-                wait.isVisible = true
-            }
-
-            yesBtn.setOnClickListener{
                 stageRef2.setValue(0)
                 loadingIcon.isVisible = false
                 listLinks.isVisible = true
@@ -129,6 +117,19 @@ class MainActivity : AppCompatActivity() {
                 startOver.isVisible = false
                 voiceCommandsButton.isVisible = true
                 wait.isVisible = false
+            }
+
+            yesBtn.setOnClickListener{
+                stageRef2.setValue(3)
+                Glide.with(this).load(R.drawable.loadingicon2).into(loadingIcon)
+                loadingIcon.isVisible = true
+                listLinks.isVisible = false
+                continueButton.isVisible = false
+                capBtn.isVisible = false
+                startOver.isVisible = false
+                noBtn.isVisible = false
+                yesBtn.isVisible = false
+                wait.isVisible = true
             }
         }
         var reference = ""
@@ -142,7 +143,7 @@ class MainActivity : AppCompatActivity() {
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val stageRef = dataSnapshot.getValue().toString()
-                    if (stageRef == "3") {
+                    if (stageRef == "4") {
                         voiceCommandsButton.isVisible = true
                         loadingIcon.isVisible = false
                         listLinks.isVisible = true
@@ -179,8 +180,7 @@ class MainActivity : AppCompatActivity() {
                         listLinks.setOnItemClickListener { parent, _, position, _ ->
                             val selectedItem = parent.getItemAtPosition(position) as String
                             val openURL = Intent(android.content.Intent.ACTION_VIEW)
-                            openURL.data =
-                                Uri.parse("https://www.amazon.com" + selectedItem)
+                            openURL.data = Uri.parse(selectedItem)
                             startActivity(openURL)
                         }
                     }
@@ -228,6 +228,8 @@ class MainActivity : AppCompatActivity() {
                     var age = document.data?.get("age").toString().toInt()
                     var gender = document.data?.get("gender").toString().toInt()
                     var firstname = document.data?.get("fname").toString()
+                    var source = document.data?.get("source").toString()
+                    var destination = document.data?.get("destination").toString()
 
 //                    val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
                     editor.putString("calendar", calendar)
@@ -241,6 +243,8 @@ class MainActivity : AppCompatActivity() {
                     editor.putString("darkMode", darkMode)
                     editor.putInt("age", age)
                     editor.putInt("gender", gender)
+                    editor.putString("source", source)
+                    editor.putString("destination", destination)
                     while (!editor.commit()) {
                         Thread.sleep(1000)
                     }
@@ -251,7 +255,7 @@ class MainActivity : AppCompatActivity() {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     }
 
-                    //Update notes text, time, age, gender, name
+                    //Update notes text, time, age, gender, name, traffic
                     val textRef = database.getReference("modules/notes/text")
                     textRef.setValue(sharedPreference.getString("notesText", ""))
 
@@ -270,6 +274,12 @@ class MainActivity : AppCompatActivity() {
 
                     val nameRef = database.getReference("user/name")
                     nameRef.setValue(firstname)
+
+                    val sourceRef = database.getReference("modules/traffic/source")
+                    sourceRef.setValue(source)
+
+                    val destinationRef = database.getReference("modules/traffic/destination")
+                    destinationRef.setValue(destination)
 
                     //Update realtime database module locations from firestore
                     val calendarLoc = sharedPreference.getString("calendar", "")

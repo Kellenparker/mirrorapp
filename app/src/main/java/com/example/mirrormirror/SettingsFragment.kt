@@ -230,6 +230,11 @@ class SettingsFragment : Fragment() {
                 binding.backToScanLayout.visibility = View.GONE
                 binding.logoutLayout.visibility = View.GONE
                 binding.ageGenderLayout.visibility = View.GONE
+                binding.startingLabel.visibility = View.GONE
+                binding.starting.visibility = View.GONE
+                binding.destinationLabel.visibility = View.GONE
+                binding.destination.visibility = View.GONE
+                binding.update.visibility = View.GONE
             }
             binding.notesBtn.setOnClickListener {
                 binding.instructionsLabel.visibility = View.GONE
@@ -247,6 +252,11 @@ class SettingsFragment : Fragment() {
                 binding.backToScanLayout.visibility = View.GONE
                 binding.logoutLayout.visibility = View.GONE
                 binding.ageGenderLayout.visibility = View.GONE
+                binding.startingLabel.visibility = View.GONE
+                binding.starting.visibility = View.GONE
+                binding.destinationLabel.visibility = View.GONE
+                binding.destination.visibility = View.GONE
+                binding.update.visibility = View.GONE
             }
             binding.preferencesBtn.setOnClickListener {
                 binding.instructionsLabel.visibility = View.GONE
@@ -264,6 +274,11 @@ class SettingsFragment : Fragment() {
                 binding.backToScanLayout.visibility = View.GONE
                 binding.ageGenderLayout.visibility = View.VISIBLE
                 binding.logoutLayout.visibility = View.VISIBLE
+                binding.startingLabel.visibility = View.VISIBLE
+                binding.starting.visibility = View.VISIBLE
+                binding.destinationLabel.visibility = View.VISIBLE
+                binding.destination.visibility = View.VISIBLE
+                binding.update.visibility = View.VISIBLE
             }
             binding.backToScan.setOnClickListener {
                 requireActivity().finish()
@@ -308,6 +323,8 @@ class SettingsFragment : Fragment() {
                 var text = document.data?.get("text").toString()
                 var time = document.data?.get("time").toString()
                 var darkMode = document.data?.get("darkMode").toString()
+                var source = document.data?.get("source").toString()
+                var destination = document.data?.get("destination").toString()
 
                 editor.putString("calendar", calendar)
                 editor.putString("motivation", motivation)
@@ -318,12 +335,17 @@ class SettingsFragment : Fragment() {
                 editor.putString("notesText", text)
                 editor.putString("time", time)
                 editor.putString("darkMode", darkMode)
+                editor.putString("source", source)
+                editor.putString("destination", destination)
                 while (!editor.commit()) {
                     Thread.sleep(1000)
                 }
                 if (isAdded){
-                binding.notesText.setText(sharedPreference.getString("notesText", ""))
-                binding.helloLabel.setText("Hello, " + sharedPreference.getString("first_name", ""))}
+                    binding.notesText.setText(sharedPreference.getString("notesText", ""))
+                    binding.helloLabel.setText("Hello, " + sharedPreference.getString("first_name", ""))
+                    binding.starting.setText(sharedPreference.getString("source", ""))
+                    binding.destination.setText(sharedPreference.getString("destination", ""))
+                }
 
                 // Load drag and drop preferences
                 val calendarLoc = sharedPreference.getString("calendar", "")
@@ -519,7 +541,7 @@ class SettingsFragment : Fragment() {
                     binding.bottomLeftLayout.setOnDragListener(dragListener)
                     binding.bottomRightLayout.setOnDragListener(dragListener)
 
-                    binding.dragCalendar.setOnLongClickListener {
+                    binding.dragCalendar.setOnLongClickListener{
                         val clipText = "calendar"
                         val item = ClipData.Item(clipText)
                         val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
@@ -613,6 +635,21 @@ class SettingsFragment : Fragment() {
                         }
                         editor.commit()
                     })
+
+                    // Update traffic
+                    val sourceRef = database.getReference("modules/traffic/source")
+                    val destRef = database.getReference("modules/traffic/destination")
+                    binding.update.setOnClickListener{
+                        var tempSource = binding.starting.text.toString()
+                        var tempDest = binding.destination.text.toString()
+                        editor.putString("source", tempSource)
+                        editor.putString("destination", tempDest)
+                        sourceRef.setValue(tempSource)
+                        destRef.setValue(tempDest)
+                        docRef.update("source", tempSource)
+                        docRef.update("destination", tempDest)
+                        editor.commit()
+                    }
 
                     //      Notes
                     val notesRef = database.getReference("modules/notes/text")
@@ -743,6 +780,11 @@ class SettingsFragment : Fragment() {
                         binding.backToScanLayout.visibility = View.VISIBLE
                         binding.logoutLayout.visibility = View.GONE
                         binding.ageGenderLayout.visibility = View.GONE
+                        binding.startingLabel.visibility = View.GONE
+                        binding.starting.visibility = View.GONE
+                        binding.destinationLabel.visibility = View.GONE
+                        binding.destination.visibility = View.GONE
+                        binding.update.visibility = View.GONE
                         docRef.update("text", binding.notesText.text.toString())
                     }
                 }

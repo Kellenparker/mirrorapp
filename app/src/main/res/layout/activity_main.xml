@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="5dp"
-        android:text="Please check image on mirror. Would you like to start over?"
+        android:text="Please check image on mirror. Would you like to continue?"
         android:visibility="invisible"
         android:gravity="center_horizontal"
         android:textSize="15dp"
@@ -96,10 +96,10 @@
         android:text="
 &quot;Go to sleep&quot;                                  Turn off monitor\n
 &quot;Wake up&quot;                                        Turn on monitor\n
-&quot;Read notes&quot;                                   Read the notes\n
-&quot;Read news&quot;                                    Read the news\n
-&quot;Read motivational quote&quot;           Read the quote\n
-&quot;Upcoming event&quot;                          Read your calendar\n
+&quot;Read my notes&quot;                            Read the notes\n
+&quot;Read the news&quot;                             Read the news\n
+&quot;Motivate me&quot;                                 Read the quote\n
+&quot;Read my calendar&quot;                       Read your calendar\n
 &quot;Today's forecast&quot;                          Say the forecast\n
 &quot;What time is it&quot;                              Say date and time\n
 &quot;What time should I leave&quot;           Give traffic info\n
