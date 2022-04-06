@@ -9,10 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
@@ -56,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         val yesBtn = findViewById<Button>(R.id.yesBtn)
         val startOver = findViewById<TextView>(R.id.startOver)
         val wait = findViewById<TextView>(R.id.pleaseWait)
+        val backButton = findViewById<Button>(R.id.backButton)
         val stageRef2 = database.getReference("scan/stage")
 
         val capRef = database.getReference("scan/camera/capture")
@@ -93,6 +91,23 @@ class MainActivity : AppCompatActivity() {
             voiceCommandsButton.isVisible = false
             voiceCommands.isVisible = false
             wait.isVisible = false
+            backButton.isVisible = true
+
+            backButton.setOnClickListener{
+                stageRef2.setValue(0)
+                startOver.isVisible = false
+                wait.isVisible = false
+                capBtn.isVisible = true
+                continueButton.isVisible = false
+                noBtn.isVisible = false
+                yesBtn.isVisible = false
+                voiceCommandsButton.isVisible = true
+                voiceCommands.isVisible = false
+                loadingIcon.isVisible = false
+                listLinks.isVisible = true
+                backButton.isVisible = false
+            }
+
 
             continueButton.setOnClickListener() {
                 stageRef2.setValue(2)
@@ -104,6 +119,7 @@ class MainActivity : AppCompatActivity() {
                 yesBtn.isVisible = true
                 startOver.isVisible = true
                 wait.isVisible = false
+                backButton.isVisible = false
             }
 
             noBtn.setOnClickListener{
@@ -117,6 +133,7 @@ class MainActivity : AppCompatActivity() {
                 startOver.isVisible = false
                 voiceCommandsButton.isVisible = true
                 wait.isVisible = false
+                backButton.isVisible = false
             }
 
             yesBtn.setOnClickListener{
@@ -130,6 +147,7 @@ class MainActivity : AppCompatActivity() {
                 noBtn.isVisible = false
                 yesBtn.isVisible = false
                 wait.isVisible = true
+                backButton.isVisible = false
             }
         }
         var reference = ""
@@ -145,6 +163,7 @@ class MainActivity : AppCompatActivity() {
                     val stageRef = dataSnapshot.getValue().toString()
                     if (stageRef == "4") {
                         voiceCommandsButton.isVisible = true
+                        voiceCommands.isVisible = false
                         loadingIcon.isVisible = false
                         listLinks.isVisible = true
                         capBtn.isVisible = true
@@ -311,13 +330,13 @@ class MainActivity : AppCompatActivity() {
                     if (sharedPreference.getString("calendar", "") == "topLeft") {
                         updateModule("calendar", 1)
                     } else if (sharedPreference.getString("calendar", "") == "topRight") {
-                        updateModule("calendar", 2)
-                    } else if (sharedPreference.getString("calendar", "") == "middleLeft") {
-                        updateModule("calendar", 3)
-                    } else if (sharedPreference.getString("calendar", "") == "middleRight") {
                         updateModule("calendar", 5)
-                    } else if (sharedPreference.getString("calendar", "") == "bottomLeft") {
+                    } else if (sharedPreference.getString("calendar", "") == "middleLeft") {
+                        updateModule("calendar", 2)
+                    } else if (sharedPreference.getString("calendar", "") == "middleRight") {
                         updateModule("calendar", 6)
+                    } else if (sharedPreference.getString("calendar", "") == "bottomLeft") {
+                        updateModule("calendar", 3)
                     } else if (sharedPreference.getString("calendar", "") == "bottomRight") {
                         updateModule("calendar", 7)
                     }
@@ -325,13 +344,13 @@ class MainActivity : AppCompatActivity() {
                     if (sharedPreference.getString("motivation", "") == "topLeft") {
                         updateModule("motivation", 1)
                     } else if (sharedPreference.getString("motivation", "") == "topRight") {
-                        updateModule("motivation", 2)
-                    } else if (sharedPreference.getString("motivation", "") == "middleLeft") {
-                        updateModule("motivation", 3)
-                    } else if (sharedPreference.getString("motivation", "") == "middleRight") {
                         updateModule("motivation", 5)
-                    } else if (sharedPreference.getString("motivation", "") == "bottomLeft") {
+                    } else if (sharedPreference.getString("motivation", "") == "middleLeft") {
+                        updateModule("motivation", 2)
+                    } else if (sharedPreference.getString("motivation", "") == "middleRight") {
                         updateModule("motivation", 6)
+                    } else if (sharedPreference.getString("motivation", "") == "bottomLeft") {
+                        updateModule("motivation", 3)
                     } else if (sharedPreference.getString("motivation", "") == "bottomRight") {
                         updateModule("motivation", 7)
                     }
@@ -339,39 +358,39 @@ class MainActivity : AppCompatActivity() {
                     if (sharedPreference.getString("notes", "") == "topLeft") {
                         updateModule("notes", 1)
                     } else if (sharedPreference.getString("notes", "") == "topRight") {
-                        updateModule("notes", 2)
-                    } else if (sharedPreference.getString("notes", "") == "middleLeft") {
-                        updateModule("notes", 3)
-                    } else if (sharedPreference.getString("notes", "") == "middleRight") {
                         updateModule("notes", 5)
-                    } else if (sharedPreference.getString("notes", "") == "bottomLeft") {
+                    } else if (sharedPreference.getString("notes", "") == "middleLeft") {
+                        updateModule("notes", 2)
+                    } else if (sharedPreference.getString("notes", "") == "middleRight") {
                         updateModule("notes", 6)
+                    } else if (sharedPreference.getString("notes", "") == "bottomLeft") {
+                        updateModule("notes", 3)
                     } else if (sharedPreference.getString("notes", "") == "bottomRight") {
                         updateModule("notes", 7)
                     }
                     if (sharedPreference.getString("news", "") == "topLeft") {
                         updateModule("news", 1)
                     } else if (sharedPreference.getString("news", "") == "topRight") {
-                        updateModule("news", 2)
-                    } else if (sharedPreference.getString("news", "") == "middleLeft") {
-                        updateModule("news", 3)
-                    } else if (sharedPreference.getString("news", "") == "middleRight") {
                         updateModule("news", 5)
-                    } else if (sharedPreference.getString("news", "") == "bottomLeft") {
+                    } else if (sharedPreference.getString("news", "") == "middleLeft") {
+                        updateModule("news", 2)
+                    } else if (sharedPreference.getString("news", "") == "middleRight") {
                         updateModule("news", 6)
+                    } else if (sharedPreference.getString("news", "") == "bottomLeft") {
+                        updateModule("news", 3)
                     } else if (sharedPreference.getString("news", "") == "bottomRight") {
                         updateModule("news", 7)
                     }
                     if (sharedPreference.getString("traffic", "") == "topLeft") {
                         updateModule("traffic", 1)
                     } else if (sharedPreference.getString("traffic", "") == "topRight") {
-                        updateModule("traffic", 2)
-                    } else if (sharedPreference.getString("traffic", "") == "middleLeft") {
-                        updateModule("traffic", 3)
-                    } else if (sharedPreference.getString("traffic", "") == "middleRight") {
                         updateModule("traffic", 5)
-                    } else if (sharedPreference.getString("traffic", "") == "bottomLeft") {
+                    } else if (sharedPreference.getString("traffic", "") == "middleLeft") {
+                        updateModule("traffic", 2)
+                    } else if (sharedPreference.getString("traffic", "") == "middleRight") {
                         updateModule("traffic", 6)
+                    } else if (sharedPreference.getString("traffic", "") == "bottomLeft") {
+                        updateModule("traffic", 3)
                     } else if (sharedPreference.getString("traffic", "") == "bottomRight") {
                         updateModule("traffic", 7)
                     }
@@ -379,13 +398,13 @@ class MainActivity : AppCompatActivity() {
                     if (sharedPreference.getString("weather", "") == "topLeft") {
                         updateModule("weather", 1)
                     } else if (sharedPreference.getString("weather", "") == "topRight") {
-                        updateModule("weather", 2)
-                    } else if (sharedPreference.getString("weather", "") == "middleLeft") {
-                        updateModule("weather", 3)
-                    } else if (sharedPreference.getString("weather", "") == "middleRight") {
                         updateModule("weather", 5)
-                    } else if (sharedPreference.getString("weather", "") == "bottomLeft") {
+                    } else if (sharedPreference.getString("weather", "") == "middleLeft") {
+                        updateModule("weather", 2)
+                    } else if (sharedPreference.getString("weather", "") == "middleRight") {
                         updateModule("weather", 6)
+                    } else if (sharedPreference.getString("weather", "") == "bottomLeft") {
+                        updateModule("weather", 3)
                     } else if (sharedPreference.getString("weather", "") == "bottomRight") {
                         updateModule("weather", 7)
                     }

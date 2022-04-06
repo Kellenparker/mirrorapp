@@ -383,19 +383,19 @@ class SettingsFragment : Fragment() {
                     } else if (sharedPreference.getString("calendar", "") == "topRight") {
                         iconView.removeView(binding.dragCalendar)
                         topRightView.addView(binding.dragCalendar)
-                        updateModule("calendar", 2)
+                        updateModule("calendar", 5)
                     } else if (sharedPreference.getString("calendar", "") == "middleLeft") {
                         iconView.removeView(binding.dragCalendar)
                         middleLeftView.addView(binding.dragCalendar)
-                        updateModule("calendar", 3)
+                        updateModule("calendar", 2)
                     } else if (sharedPreference.getString("calendar", "") == "middleRight") {
                         iconView.removeView(binding.dragCalendar)
                         middleRightView.addView(binding.dragCalendar)
-                        updateModule("calendar", 5)
+                        updateModule("calendar", 6)
                     } else if (sharedPreference.getString("calendar", "") == "bottomLeft") {
                         iconView.removeView(binding.dragCalendar)
                         bottomLeftView.addView(binding.dragCalendar)
-                        updateModule("calendar", 6)
+                        updateModule("calendar", 3)
                     } else if (sharedPreference.getString("calendar", "") == "bottomRight") {
                         iconView.removeView(binding.dragCalendar)
                         bottomRightView.addView(binding.dragCalendar)
@@ -409,19 +409,19 @@ class SettingsFragment : Fragment() {
                     } else if (sharedPreference.getString("motivation", "") == "topRight") {
                         iconView.removeView(binding.dragMotivation)
                         topRightView.addView(binding.dragMotivation)
-                        updateModule("motivation", 2)
+                        updateModule("motivation", 5)
                     } else if (sharedPreference.getString("motivation", "") == "middleLeft") {
                         iconView.removeView(binding.dragMotivation)
                         middleLeftView.addView(binding.dragMotivation)
-                        updateModule("motivation", 3)
+                        updateModule("motivation", 2)
                     } else if (sharedPreference.getString("motivation", "") == "middleRight") {
                         iconView.removeView(binding.dragMotivation)
                         middleRightView.addView(binding.dragMotivation)
-                        updateModule("motivation", 5)
+                        updateModule("motivation", 6)
                     } else if (sharedPreference.getString("motivation", "") == "bottomLeft") {
                         iconView.removeView(binding.dragMotivation)
                         bottomLeftView.addView(binding.dragMotivation)
-                        updateModule("motivation", 6)
+                        updateModule("motivation", 3)
                     } else if (sharedPreference.getString("motivation", "") == "bottomRight") {
                         iconView.removeView(binding.dragMotivation)
                         bottomRightView.addView(binding.dragMotivation)
@@ -435,19 +435,19 @@ class SettingsFragment : Fragment() {
                     } else if (sharedPreference.getString("notes", "") == "topRight") {
                         iconView.removeView(binding.dragNotes)
                         topRightView.addView(binding.dragNotes)
-                        updateModule("notes", 2)
+                        updateModule("notes", 5)
                     } else if (sharedPreference.getString("notes", "") == "middleLeft") {
                         iconView.removeView(binding.dragNotes)
                         middleLeftView.addView(binding.dragNotes)
-                        updateModule("notes", 3)
+                        updateModule("notes", 2)
                     } else if (sharedPreference.getString("notes", "") == "middleRight") {
                         iconView.removeView(binding.dragNotes)
                         middleRightView.addView(binding.dragNotes)
-                        updateModule("notes", 5)
+                        updateModule("notes", 6)
                     } else if (sharedPreference.getString("notes", "") == "bottomLeft") {
                         iconView.removeView(binding.dragNotes)
                         bottomLeftView.addView(binding.dragNotes)
-                        updateModule("notes", 6)
+                        updateModule("notes", 3)
                     } else if (sharedPreference.getString("notes", "") == "bottomRight") {
                         iconView.removeView(binding.dragNotes)
                         bottomRightView.addView(binding.dragNotes)
@@ -460,19 +460,19 @@ class SettingsFragment : Fragment() {
                     } else if (sharedPreference.getString("news", "") == "topRight") {
                         iconView.removeView(binding.dragNews)
                         topRightView.addView(binding.dragNews)
-                        updateModule("news", 2)
+                        updateModule("news", 5)
                     } else if (sharedPreference.getString("news", "") == "middleLeft") {
                         iconView.removeView(binding.dragNews)
                         middleLeftView.addView(binding.dragNews)
-                        updateModule("news", 3)
+                        updateModule("news", 2)
                     } else if (sharedPreference.getString("news", "") == "middleRight") {
                         iconView.removeView(binding.dragNews)
                         middleRightView.addView(binding.dragNews)
-                        updateModule("news", 5)
+                        updateModule("news", 6)
                     } else if (sharedPreference.getString("news", "") == "bottomLeft") {
                         iconView.removeView(binding.dragNews)
                         bottomLeftView.addView(binding.dragNews)
-                        updateModule("news", 6)
+                        updateModule("news", 3)
                     } else if (sharedPreference.getString("news", "") == "bottomRight") {
                         iconView.removeView(binding.dragNews)
                         bottomRightView.addView(binding.dragNews)
@@ -485,19 +485,19 @@ class SettingsFragment : Fragment() {
                     } else if (sharedPreference.getString("traffic", "") == "topRight") {
                         iconView.removeView(binding.dragTraffic)
                         topRightView.addView(binding.dragTraffic)
-                        updateModule("traffic", 2)
+                        updateModule("traffic", 5)
                     } else if (sharedPreference.getString("traffic", "") == "middleLeft") {
                         iconView.removeView(binding.dragTraffic)
                         middleLeftView.addView(binding.dragTraffic)
-                        updateModule("traffic", 3)
+                        updateModule("traffic", 2)
                     } else if (sharedPreference.getString("traffic", "") == "middleRight") {
                         iconView.removeView(binding.dragTraffic)
                         middleRightView.addView(binding.dragTraffic)
-                        updateModule("traffic", 5)
+                        updateModule("traffic", 6)
                     } else if (sharedPreference.getString("traffic", "") == "bottomLeft") {
                         iconView.removeView(binding.dragTraffic)
                         bottomLeftView.addView(binding.dragTraffic)
-                        updateModule("traffic", 6)
+                        updateModule("traffic", 3)
                     } else if (sharedPreference.getString("traffic", "") == "bottomRight") {
                         iconView.removeView(binding.dragTraffic)
                         bottomRightView.addView(binding.dragTraffic)
@@ -511,19 +511,19 @@ class SettingsFragment : Fragment() {
                     } else if (sharedPreference.getString("weather", "") == "topRight") {
                         iconView.removeView(binding.dragWeather)
                         topRightView.addView(binding.dragWeather)
-                        updateModule("weather", 2)
+                        updateModule("weather", 5)
                     } else if (sharedPreference.getString("weather", "") == "middleLeft") {
                         iconView.removeView(binding.dragWeather)
                         middleLeftView.addView(binding.dragWeather)
-                        updateModule("weather", 3)
+                        updateModule("weather", 2)
                     } else if (sharedPreference.getString("weather", "") == "middleRight") {
                         iconView.removeView(binding.dragWeather)
                         middleRightView.addView(binding.dragWeather)
-                        updateModule("weather", 5)
+                        updateModule("weather", 6)
                     } else if (sharedPreference.getString("weather", "") == "bottomLeft") {
                         iconView.removeView(binding.dragWeather)
                         bottomLeftView.addView(binding.dragWeather)
-                        updateModule("weather", 6)
+                        updateModule("weather", 3)
                     } else if (sharedPreference.getString("weather", "") == "bottomRight") {
                         iconView.removeView(binding.dragWeather)
                         bottomRightView.addView(binding.dragWeather)
@@ -754,8 +754,16 @@ class SettingsFragment : Fragment() {
                     }
                     // Log out
                     binding.logOut.setOnClickListener() {
+                        val nameRef = database.getReference("user/name")
                         editor.putString("first_name", "")
                         editor.commit()
+                        updateModule("calendar", -1)
+                        updateModule("motivation", -1)
+                        updateModule("news", -1)
+                        updateModule("notes", -1)
+                        updateModule("traffic", -1)
+                        updateModule("weather", -1)
+                        nameRef.setValue("")
                         requireActivity().finish()
                         val intent = Intent(requireContext(), MainActivity::class.java)
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)

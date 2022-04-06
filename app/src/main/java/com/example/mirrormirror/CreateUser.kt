@@ -210,7 +210,7 @@ class CreateUser : AppCompatActivity() {
                                 "notes" to "",
                                 "traffic" to "",
                                 "weather" to "",
-                                "text" to "",
+                                "text" to "Hello " + firstName + "!\nThank you for using\nMirror² \uD83D\uDE04",
                                 "time" to "true",
                                 "darkMode" to "false",
                                 "source" to "1600 Pennsylvania Avenue NW, Washington, DC 20500",

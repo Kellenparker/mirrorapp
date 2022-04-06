@@ -517,6 +517,7 @@
         android:layout_marginRight="125dp"
         android:visibility="gone"
         android:text="Update Traffic"
+        android:textColor="@color/textColor"
         app:layout_constraintLeft_toLeftOf="@id/destination"
         app:layout_constraintTop_toBottomOf="@id/destination"
         />
@@ -559,7 +560,6 @@
             android:id="@+id/backToScan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:textColor="@color/textColor"
             android:text="Back" />
     </LinearLayout>
