@@ -79,7 +79,6 @@ class MainActivity : AppCompatActivity() {
 
         capBtn.setOnClickListener {
             stageRef2.setValue(1)
-            capRef.setValue(true)
             loadingIcon.setImageResource(R.drawable.centerwhite)
             continueButton.isVisible = true
             capBtn.isVisible = false
@@ -111,6 +110,7 @@ class MainActivity : AppCompatActivity() {
 
             continueButton.setOnClickListener() {
                 stageRef2.setValue(2)
+                capRef.setValue(true)
                 loadingIcon.isVisible = false
                 listLinks.isVisible = false
                 continueButton.isVisible = false
@@ -123,17 +123,18 @@ class MainActivity : AppCompatActivity() {
             }
 
             noBtn.setOnClickListener{
-                stageRef2.setValue(0)
-                loadingIcon.isVisible = false
-                listLinks.isVisible = true
-                continueButton.isVisible = false
-                capBtn.isVisible = true
+                stageRef2.setValue(1)
+                continueButton.isVisible = true
+                capBtn.isVisible = false
+                loadingIcon.isVisible = true
+                listLinks.isVisible = false
                 noBtn.isVisible = false
                 yesBtn.isVisible = false
                 startOver.isVisible = false
-                voiceCommandsButton.isVisible = true
+                voiceCommandsButton.isVisible = false
+                voiceCommands.isVisible = false
                 wait.isVisible = false
-                backButton.isVisible = false
+                backButton.isVisible = true
             }
 
             yesBtn.setOnClickListener{
