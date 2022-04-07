@@ -209,8 +209,6 @@ class MainActivity : AppCompatActivity() {
                             openURL.data = Uri.parse(selectedItem)
                             startActivity(openURL)
                         }
-                    } else {
-                        listLinks.isVisible = false
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
