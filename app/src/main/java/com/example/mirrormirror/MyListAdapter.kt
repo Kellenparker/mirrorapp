@@ -29,7 +29,6 @@ class MyListAdapter(private val context: Activity, private val title: MutableLis
             }
             subtitleText.text = description[position]
         }catch (e: IndexOutOfBoundsException){
-            Toast.makeText(context,"Sorry, please try again.",Toast.LENGTH_LONG).show()
         }
         return rowView
     }

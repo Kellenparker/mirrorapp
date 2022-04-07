@@ -120,6 +120,8 @@ class MainActivity : AppCompatActivity() {
                 startOver.isVisible = true
                 wait.isVisible = false
                 backButton.isVisible = false
+                voiceCommandsButton.isVisible = false
+                voiceCommands.isVisible = false
             }
 
             noBtn.setOnClickListener{
@@ -149,18 +151,21 @@ class MainActivity : AppCompatActivity() {
                 yesBtn.isVisible = false
                 wait.isVisible = true
                 backButton.isVisible = false
+                voiceCommandsButton.isVisible = false
+                voiceCommands.isVisible = false
             }
         }
-        var reference = ""
-        var reference2 = ""
-        var reference3 = ""
-        var listItems = mutableListOf<String>()
-        val listItems2 = mutableListOf<String>()
-        val listItems3 = mutableListOf<String>()
 
         dataReference.child("scan/stage")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    var reference = ""
+                    var reference2 = ""
+                    var reference3 = ""
+                    var listItems = mutableListOf<String>()
+                    val listItems2 = mutableListOf<String>()
+                    val listItems3 = mutableListOf<String>()
+
                     val stageRef = dataSnapshot.getValue().toString()
                     if (stageRef == "4") {
                         voiceCommandsButton.isVisible = true
