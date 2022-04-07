@@ -167,6 +167,7 @@ class MainActivity : AppCompatActivity() {
                     val listItems3 = mutableListOf<String>()
 
                     val stageRef = dataSnapshot.getValue().toString()
+
                     if (stageRef == "4") {
                         voiceCommandsButton.isVisible = true
                         voiceCommands.isVisible = false
@@ -208,6 +209,8 @@ class MainActivity : AppCompatActivity() {
                             openURL.data = Uri.parse(selectedItem)
                             startActivity(openURL)
                         }
+                    } else {
+                        listLinks.isVisible = false
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
