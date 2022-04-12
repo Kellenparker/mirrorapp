@@ -172,9 +172,12 @@ class MainActivity : AppCompatActivity() {
                         voiceCommandsButton.isVisible = true
                         voiceCommands.isVisible = false
                         loadingIcon.isVisible = false
+                        startOver.isVisible = false
+                        noBtn.isVisible = false
+                        yesBtn.isVisible = false
                         listLinks.isVisible = true
                         capBtn.isVisible = true
-                        for (i in 0..45) {
+                        for (i in 1..45) {
                             mdatabase.child("scan/links/link$i/linkUrl").get()
                                 .addOnSuccessListener {
                                     reference = it.value.toString()
