@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                 backButton.isVisible = false
                 voiceCommandsButton.isVisible = false
                 voiceCommands.isVisible = false
-                Thread.sleep(2000)
+                Thread.sleep(3500)
             }
 
             noBtn.setOnClickListener{
