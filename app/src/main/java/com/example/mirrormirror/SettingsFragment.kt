@@ -1,5 +1,7 @@
 package com.example.mirrormirror
 
+import android.R.attr.data
+import android.app.TimePickerDialog
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Context
@@ -13,9 +15,7 @@ import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.RadioButton
-import android.widget.RadioGroup
+import android.widget.*
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
@@ -33,6 +33,7 @@ class SettingsFragment : Fragment() {
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
     val database = Firebase.database
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -279,6 +280,7 @@ class SettingsFragment : Fragment() {
                 binding.destinationLabel.visibility = View.VISIBLE
                 binding.destination.visibility = View.VISIBLE
                 binding.update.visibility = View.VISIBLE
+                binding.arrivalTime.visibility = View.VISIBLE
             }
             binding.backToScan.setOnClickListener {
                 requireActivity().finish()
@@ -325,6 +327,8 @@ class SettingsFragment : Fragment() {
                 var darkMode = document.data?.get("darkMode").toString()
                 var source = document.data?.get("source").toString()
                 var destination = document.data?.get("destination").toString()
+                var arrivalHour = document.data?.get("arrivalHour").toString().toInt()
+                var arrivalMin = document.data?.get("arrivalMin").toString().toInt()
 
                 editor.putString("calendar", calendar)
                 editor.putString("motivation", motivation)
@@ -337,6 +341,8 @@ class SettingsFragment : Fragment() {
                 editor.putString("darkMode", darkMode)
                 editor.putString("source", source)
                 editor.putString("destination", destination)
+                editor.putInt("arrivalHour", arrivalHour)
+                editor.putInt("arrivalMin", arrivalMin)
                 while (!editor.commit()) {
                     Thread.sleep(1000)
                 }
@@ -651,6 +657,30 @@ class SettingsFragment : Fragment() {
                         editor.commit()
                     }
 
+
+                    binding.arrivalTime.setOnClickListener{
+                        val timePicker: TimePickerDialog = TimePickerDialog(
+                            // pass the Context
+                            requireContext(),
+                            // listener to perform task
+                            // when time is picked
+                            timePickerDialogListener,
+                            // default hour when the time picker
+                            // dialog is opened
+                            sharedPreference.getInt("arrivalHour", 8),
+                            // default minute when the time picker
+                            // dialog is opened
+                            sharedPreference.getInt("arrivalMin", 0),
+                            // 24 hours time picker is
+                            // false (varies according to the region)
+                            false
+                        )
+
+                        // then after building the timepicker
+                        // dialog show the dialog to user
+                        timePicker.show()
+                    }
+
                     //      Notes
                     val notesRef = database.getReference("modules/notes/text")
                     binding.notesText.addTextChangedListener(object : TextWatcher {
@@ -793,6 +823,7 @@ class SettingsFragment : Fragment() {
                         binding.destinationLabel.visibility = View.GONE
                         binding.destination.visibility = View.GONE
                         binding.update.visibility = View.GONE
+                        binding.arrivalTime.visibility = View.GONE
                         docRef.update("text", binding.notesText.text.toString())
                     }
                 }
@@ -801,6 +832,27 @@ class SettingsFragment : Fragment() {
                 Log.d("Error", "get failed with ", exception)
             }
     }
+    private val timePickerDialogListener: TimePickerDialog.OnTimeSetListener =
+        object : TimePickerDialog.OnTimeSetListener {
+            override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+                val arrivalHourRef = database.getReference("modules/traffic/hour")
+                val arrivalMinRef = database.getReference("modules/traffic/min")
+                val sharedPreference =
+                    requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+                val db = Firebase.firestore
+                val docRef = db.collection("users") .document(sharedPreference.getString("userId", "").toString())
+                var editor = sharedPreference.edit()
+
+                editor.putInt("arrivalHour", hourOfDay)
+                editor.putInt("arrivalMin", minute)
+                arrivalHourRef.setValue(hourOfDay)
+                arrivalMinRef.setValue(minute)
+                docRef.update("arrivalHour", hourOfDay)
+                docRef.update("arrivalMin", minute)
+                editor.commit()
+//                Toast.makeText(requireContext(), "The hour is: " + hourOfDay + "min: " + minute, Toast.LENGTH_SHORT).show();
+            }
+        }
 
 
     override fun onDestroyView() {

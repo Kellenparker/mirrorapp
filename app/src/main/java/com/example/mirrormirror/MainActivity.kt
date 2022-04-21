@@ -260,6 +260,9 @@ class MainActivity : AppCompatActivity() {
                     var firstname = document.data?.get("fname").toString()
                     var source = document.data?.get("source").toString()
                     var destination = document.data?.get("destination").toString()
+                    var arrivalHour = document.data?.get("arrivalHour").toString().toInt()
+                    var arrivalMin = document.data?.get("arrivalMin").toString().toInt()
+
 
 //                    val sharedPreference = getSharedPreferences("user_data", Context.MODE_PRIVATE)
                     editor.putString("calendar", calendar)
@@ -275,6 +278,8 @@ class MainActivity : AppCompatActivity() {
                     editor.putInt("gender", gender)
                     editor.putString("source", source)
                     editor.putString("destination", destination)
+                    editor.putInt("arrivalHour", arrivalHour)
+                    editor.putInt("arrivalMin", arrivalMin)
                     while (!editor.commit()) {
                         Thread.sleep(1000)
                     }
@@ -310,6 +315,12 @@ class MainActivity : AppCompatActivity() {
 
                     val destinationRef = database.getReference("modules/traffic/destination")
                     destinationRef.setValue(destination)
+
+                    val arrivalHourRef = database.getReference("modules/traffic/hour")
+                    arrivalHourRef.setValue(arrivalHour)
+
+                    val arrivalMinRef = database.getReference("modules/traffic/min")
+                    arrivalMinRef.setValue(arrivalMin)
 
                     //Update realtime database module locations from firestore
                     val calendarLoc = sharedPreference.getString("calendar", "")

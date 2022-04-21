@@ -214,7 +214,9 @@ class CreateUser : AppCompatActivity() {
                                 "time" to "true",
                                 "darkMode" to "false",
                                 "source" to "1600 Pennsylvania Avenue NW, Washington, DC 20500",
-                                "destination" to "First St SE, Washington, DC 20004"
+                                "destination" to "First St SE, Washington, DC 20004",
+                                "arrivalHour" to 8,
+                                "arrivalMin" to 0
                             )
                             db.collection("users").document(uid).set(userData)
                                 .addOnSuccessListener {
